@@ -4,7 +4,7 @@
     </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+// import { mapGetters } from 'vuex'
 import Echarts from 'echarts'
 export default {
     name: 'dashboard',
@@ -35,7 +35,7 @@ export default {
                     }
                 },
                 legend: {
-                    data: ['新增用户', '新增管理员', '新增店铺', '新增订单', '用户访问量','接口调用次数']
+                    data: ['新增用户', '新增管理员', '新增店铺', '新增订单', '用户访问量', '接口调用次数']
                 },
                 grid: {
                     left: '3%',

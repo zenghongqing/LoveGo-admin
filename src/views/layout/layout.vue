@@ -21,27 +21,22 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-// 侧边栏
+@import '../../assets/styles/mixin.scss';
+.app-wrapper {
+  @include clearfix;
+  position: relative;
+  height: 100%;
+  width: 100%;
   .sidebar-container {
+    -webkit-transition: width 0.28s;
     transition: width 0.28s;
-    width: 180px!important;
+    width: 180px !important;
     height: 100%;
     position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
     z-index: 1001;
-    a {
-      display: inline-block;
-      width: 100%;
-    }
-    .svg-icon {
-      margin-right: 16px;
-    }
-    .el-menu {
-      border: none;
-      width: 100%;
-    }
-  }
+}
+}
 </style>
-
