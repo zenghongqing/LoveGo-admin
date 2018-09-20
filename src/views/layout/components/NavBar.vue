@@ -1,6 +1,6 @@
 <template>
     <el-menu class="navbar" mode="horizontal">
-        <hamburger-component class="hamburger-container"></hamburger-component>
+        <hamburger-component class="hamburger-container" :toggleClick="toggleSideBar" :isActive="!sidebar.opened"></hamburger-component>
         <bread-crumb-component></bread-crumb-component>
         <el-dropdown class="avatar-container" trigger="click">
             <div class="avatar-wrapper">
@@ -28,16 +28,28 @@
 <script>
 import HamburgerComponent from '@/components/Hamburger'
 import BreadCrumbComponent from '@/components/Breadcrumb'
+import { mapGetters } from 'vuex'
 export default {
     data () {
         return {}
+    },
+    computed: {
+        ...mapGetters([
+            'sidebar'
+        ])
     },
     components: {
         HamburgerComponent,
         BreadCrumbComponent
     },
+    created () {
+        console.log(this.sidebar.opened)
+    },
     methods: {
-        logout () {}
+        logout () {},
+        toggleSideBar () {
+            this.$store.dispatch('ToggleSideBar')
+        }
     }
 }
 </script>

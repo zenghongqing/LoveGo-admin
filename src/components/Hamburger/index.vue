@@ -15,11 +15,19 @@
 export default {
     data () {
         return {
-            isActive: false
+        }
+    },
+    props: {
+        isActive: {
+            type: Boolean,
+            default: false
+        },
+        toggleClick: {
+            type: Function,
+            default: null
         }
     },
     methods: {
-        toggleClick () {}
     }
 }
 </script>

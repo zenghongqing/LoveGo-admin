@@ -1,12 +1,12 @@
 const Router = require('koa-router')
 const controller = require('../controller')
 const router = new Router()
-const bodyParser = require('koa-bodyparser')
-const checkToken = require('../token/checkToken')
+const upload = require('./upload')
+// const checkToken = require('../token/checkToken')
 // 启动数据库
 module.exports = (app) => {
-    router.post('/reg', checkToken, controller.Reg)
-    router.post('/login', checkToken, controller.Login)
-    app.use(bodyParser())
+    router.post('/CreateUser', controller.CreateUser)
+    router.post('/uploadfile', upload.single('file'), controller.UploadFile)
+    router.post('/login', controller.Login)
     app.use(router.routes()).use(router.allowedMethods())
 }

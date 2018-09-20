@@ -1,3 +1,80 @@
 <template>
-    <div class="goods-category"></div>
+    <div class="goodsCategory-container">
+        <el-row type="flex" jusity="left" align="center">
+            <el-col :span="6">
+                <div class="grid-content bg-purple">
+                    <el-tree ref="categoryTree" node-key="id" highlight-current :default-checked-keys="categoryData.defaultCategory.Id" :data="categoryData.categoryTree"
+                    accordion @node-click="handleNodeClick"
+                    :render-content="renderCategoryControl"></el-tree>
+                </div>
+            </el-col>
+            <el-col :span="10">
+                <el-form :model="Form" ref="ruleForm" label-position="left" class="card-box admin-form">
+                    <el-form-item label="节点Id" prop="id" label-width="80px">
+                        <el-input :readonly="true" :disabled="true" v-model="Form.id"></el-input>
+                    </el-form-item>
+                    <el-form-item :rules="[
+                    {required: true, message: '名称不能为空'}
+                    ]" label="名称" prop="name" label-width="80px">
+                        <el-input v-model="Form.name"></el-input>
+                    </el-form-item>
+                    <el-form-item :rules="[
+                    {required: true, message: 'Id不能为空'}
+                    ]" label="父节点Id" prop="parentId" label-width="80px">
+                        <el-input v-model="Form.parentId"></el-input>
+                    </el-form-item>
+                    <el-form-item :rules="[
+                    {required: true, message: '描述不能为空'}
+                    ]" label="描述" prop="desc" label-width="80px">
+                        <el-input v-model="Form.desc"></el-input>
+                    </el-form-item>
+                    <el-form-item label="轮播图" prop="avatar" label-width="80px">
+                        <el-upload action="/" list-type="picture-card" ref="uploadImages" :multiple="true"
+                        :limit="3" :file-list="uploadFile.uploadImageList" :autoUpload="false" :on-remove="handleUploadRemove"
+                        :onPreview="handlePictureCardPreview" :onSuccess="handleUploadSuccess" :onExceed="() => {$message.error('商品轮播图不能超过三张')}">
+                            <i class="el-icon-plus"></i>
+                        </el-upload>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button style="width:100%;" type="primary" @click="editCategory">修改</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-col>
+        </el-row>
+    </div>
 </template>
+<script>
+export default {
+    data () {
+        return {
+            Form: {
+                id: '',
+                name: '',
+                parentId: ''
+            },
+            uploadFile: {
+                dialogImageUrl: '',
+                dialogVisible: false,
+                uploadImageList: []
+            },
+            // 商品分类
+            categoryData: {
+                categoryTree: [],
+                defaultCategory: {
+                    Id: [],
+                    label: ''
+                },
+                dialogtreeVisible: false
+            }
+        }
+    },
+    methods: {
+        handleNodeClick () {},
+        renderCategoryControl () {},
+        handleUploadRemove () {},
+        handlePictureCardPreview () {},
+        handleUploadSuccess () {},
+        editCategory () {}
+    }
+}
+</script>

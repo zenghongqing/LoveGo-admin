@@ -1,5 +1,5 @@
 <template>
-    <div class="app-wrapper">
+    <div class="app-wrapper" :class="{hideSidebar: !sidebar.opened}">
         <side-bar class="sidebar-container"></side-bar>
         <div class="main-container">
             <nav-bar></nav-bar>
@@ -12,6 +12,11 @@ import { AppMain, SideBar, NavBar } from '@/views/layout/components'
 export default {
     data () {
         return {}
+    },
+    computed: {
+        sidebar () {
+            return this.$store.state.app.sidebar
+        }
     },
     components: {
         AppMain,

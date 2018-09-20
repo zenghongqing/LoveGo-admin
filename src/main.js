@@ -9,6 +9,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/en'
 import VueHtml5Editor from 'vue-html5-editor'
 import store from './store'
+import './permission'
 import '@/icons' // 导入svg-icon组件
 import '@/assets/styles/index.scss' // global css
 Vue.use(ElementUI, {
