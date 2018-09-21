@@ -28,7 +28,6 @@ export default {
         SideBarItem
     },
     created () {
-        console.log(this.$router.options.routes)
     }
 }
 </script>

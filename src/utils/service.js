@@ -26,22 +26,7 @@ service.interceptors.request.use(config => {
 // response拦截器
 service.interceptors.response.use(
     response => {
-        /**
-         * code为非2000是抛错 可结合自己业务进行修改
-         */
-        console.log(response, 'response')
-        if (response.status === 200) {
-            if (response.data) {
-                return response.data
-            } else {
-                Message({
-                    message: response.data.Message,
-                    type: 'error',
-                    duration: 5 * 1000
-                })
-                return Promise.reject(response.data.Message)
-            }
-        }
+        return response
     }
     , error => {
         console.log('err' + error)

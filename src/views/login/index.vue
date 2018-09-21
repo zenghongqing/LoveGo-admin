@@ -49,7 +49,7 @@ export default {
                 password: [{required: true, trigger: 'blur', validator: validatePass}]
             },
             loginForm: {
-                username: 'test',
+                username: 'zhq',
                 password: '123456'
             },
             pwdType: 'password',
@@ -64,7 +64,23 @@ export default {
                 this.pwdType = 'password'
             }
         },
-        handleLogin () {}
+        handleLogin () {
+            this.$refs.loginForm.validate(valid => {
+                if (valid) {
+                    this.loading = true
+                    this.$store.dispatch('Login', this.loginForm).then(() => {
+                        this.loading = false
+                        console.log('跳转')
+                        this.$router.push({path: '/'})
+                    }).catch(() => {
+                        this.loading = false
+                    })
+                } else {
+                    console.log('error submit')
+                    return false
+                }
+            })
+        }
     }
 }
 </script>

@@ -31,7 +31,6 @@ export default {
                 matched = [{path: '/dashboard', meta: { title: '首页' }}].concat(matched)
             }
             // matched = [{path: '/dashboard', meta: { title: '首页' }}]
-            console.log(matched, 'matched')
             this.levelList = matched
         }
     }

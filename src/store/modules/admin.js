@@ -1,11 +1,10 @@
-// import { getToken, setToken, removeToken } from '@/utils/auth'
+import { setToken } from '@/utils/auth'
 import { createUser } from '@/api/admin'
+import { login, getInfo } from '@/api/login'
 const admin = {
     state: {
-        userData: {
-            userData: null,
-            adminData: null
-        }
+        userData: null,
+        adminData: null
     },
     mutations: {
         SET_USER_DATA: (state, userData) => {
@@ -19,11 +18,26 @@ const admin = {
         // 登录
         Login ({commit}, userInfo) {
             return new Promise((resolve, reject) => {
+                login(userInfo.username.trim(), userInfo.password).then(res => {
+                    if (res && res.msg) {
+                        reject(res.msg)
+                    } else {
+                        setToken(res.data)
+                        resolve()
+                    }
+                }, err => {
+                    reject(err)
+                })
             })
         },
         // 获取用户信息
         GetInfo ({commit, state}, token) {
-            return new Promise((resolve, reject) => {})
+            return new Promise((resolve, reject) => {
+                getInfo(token).then(res => {
+                    commit('SET_USER_DATA', res.data)
+                    resolve(res.data)
+                })
+            })
         },
         // 登出
         LogOut ({commit, state}) {
@@ -36,7 +50,6 @@ const admin = {
         CreateUser ({commit, state}, formData) {
             return new Promise((resolve, reject) => {
                 createUser(formData).then(res => {
-                    console.log(res, 'res')
                     resolve(res)
                 }).catch(err => {
                     reject(err)

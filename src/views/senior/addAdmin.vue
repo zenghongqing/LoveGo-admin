@@ -109,7 +109,6 @@ export default {
          * @param {data} Object 选择的省市区数据
         */
         onDistpickerSelected (data) {
-            console.log(data, 'data')
             this.Form.addressParams.province = data.province.value
             this.Form.addressParams.city = data.city.value
             this.Form.addressParams.area = data.area.value

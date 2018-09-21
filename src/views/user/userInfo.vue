@@ -47,7 +47,21 @@ export default {
     data () {
         return {
             tableData: [],
-            dataTotal: 10
+            dataTotal: 10,
+            dataParams: {
+                pageIndex: 1,
+                pageSize: 10
+            }
+        }
+    },
+    mounted () {
+        this.initData()
+    },
+    methods: {
+        initData () {
+            this.$store.dispatch('GetUserList', this.dataParams).then(res => {
+                console.log(res, 'response')
+            })
         }
     }
 }

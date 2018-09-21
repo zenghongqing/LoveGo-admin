@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <link rel='stylesheet' href='/stylesheets/prettify.css' />
+  <link rel='stylesheet' href='/javascripts/bootstrap.min.css' />
+</head>
+
+<body>
+  <h1>
+    <%= title %>
+  </h1>
+  <p>Welcome to
+    <%= title %>
+  </p>
+  <div>
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <h3 class="panel-title">Ajax </h3>
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="input-group">
+              <div class="input-group-btn">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span id="methods">POST</span>
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a value="POST" onClick="$('#methods').text('POST')">POST</a>
+                  </li>
+                  <li>
+                    <a value="GET" onClick="$('#methods').text('GET')">GET</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="input-group-btn">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span id="SelectedApi">Api</span>
+                  <span class="caret"></span>
+                </button>
+                <ul id="apimenu" class=" dropdown-menu">
+                  <li>
+                    <a value="api/member/GetUserInfo" onClick="$('#SelectedApi').text($(this).attr('value'))">api/member/GetUserInfo</a>
+                  </li>
+                  <li>
+                    <a value="api/member/Registered" onClick="$('#SelectedApi').text($(this).attr('value'))">api/member/Registered</a>
+                  </li>
+                  <li>
+                    <a value="api/member/SetPassword" onClick="$('#SelectedApi').text($(this).attr('value'))">api/member/SetPassword</a>
+                  </li>
+                  <li>
+                    <a value="api/member/Login" onClick="$('#SelectedApi').text($(this).attr('value'))">api/member/Login</a>
+                  </li>
+                  <li>
+                      <a value="api/member/LoginOut" onClick="$('#SelectedApi').text($(this).attr('value'))">api/member/LoginOut</a>
+                    </li>
+                  <li>
+                    <a value="api/member/SaveAddress" onClick="$('#SelectedApi').text($(this).attr('value'))">api/member/SaveAddress</a>
+                  </li>
+                  <li>
+                    <a value="api/member/GetAddressList" onClick="$('#SelectedApi').text($(this).attr('value'))">api/member/GetAddressList</a>
+                  </li>
+                  <li>
+                    <a value="api/member/RemoveAddress" onClick="$('#SelectedApi').text($(this).attr('value'))">api/member/RemoveAddress</a>
+                  </li>
+                  <li>
+                    <a value="Unit/uploadfile" onClick="$('#SelectedApi').text($(this).attr('value'))">Unit/uploadfile</a>
+                  </li>
+                  <li>
+                    <a value="api/member/SendPhoneMessage" onClick="$('#SelectedApi').text($(this).attr('value'))">api/member/SendPhoneMessage</a>
+                  </li>
+                  <li>
+                    <a value="api/shop/createdProduct" onClick="$('#SelectedApi').text($(this).attr('value'))">api/shop/createdProduct</a>
+                  </li>
+                  <li>
+                    <a value="api/shop/GetCategoryList" onClick="$('#SelectedApi').text($(this).attr('value'))">api/shop/GetCategoryList</a>
+                  </li>
+                  <li>
+                    <a value="api/shop/GetProductList" onClick="$('#SelectedApi').text($(this).attr('value'))">api/shop/GetProductList</a>
+                  </li>
+                  <li>
+                    <a value="api/shop/GetProduct" onClick="$('#SelectedApi').text($(this).attr('value'))">api/shop/GetProduct</a>
+                  </li>
+                  <li>
+                    <a value="api/shop/SelectProduct" onClick="$('#SelectedApi').text($(this).attr('value'))">api/shop/SelectProduct</a>
+                  </li>
+                  <li>
+                    <a value="api/shop/GetSelectedProductList" onClick="$('#SelectedApi').text($(this).attr('value'))">api/shop/GetSelectedProductList</a>
+                  </li>
+                  <li>
+                      <a value="api/shop/RemoveSelectedProduct" onClick="$('#SelectedApi').text($(this).attr('value'))">api/shop/RemoveSelectedProduct</a>
+                  </li>
+                  <li>
+                      <a value="api/shop/ConfirmSelectProduct" onClick="$('#SelectedApi').text($(this).attr('value'))">api/shop/ConfirmSelectProduct</a>
+                  </li>
+                  <li>
+                      <a value="api/shop/GetConfirmSelectedProductList" onClick="$('#SelectedApi').text($(this).attr('value'))">api/shop/GetConfirmSelectedProductList</a>
+                  </li>
+                  <li>
+                      <a value="api/shop/CreateOrder" onClick="$('#SelectedApi').text($(this).attr('value'))">api/shop/CreateOrder</a>
+                  </li>
+                  <li>
+                      <a value="api/shop/GetOrderList" onClick="$('#SelectedApi').text($(this).attr('value'))">api/shop/GetOrderList</a>
+                  </li>
+                  <li>
+                      <a value="api/shop/GetOrder" onClick="$('#SelectedApi').text($(this).attr('value'))">api/shop/GetOrder</a>
+                  </li>
+                  <li>
+                      <a value="api/shop/PayByWallet" onClick="$('#SelectedApi').text($(this).attr('value'))">api/shop/PayByWallet</a>
+                  </li>
+                  <li>
+                      <a value="api/shop/SearchGoods" onClick="$('#SelectedApi').text($(this).attr('value'))">api/shop/SearchGoods</a>
+                  </li>
+                  <li>
+                    <a value="api/member/EditUserInfo" onClick="$('#SelectedApi').text($(this).attr('value'))">api/member/EditUserInfo</a>
+                  </li>
+                  <li>
+                    <a value="api/cms/GetArticle" onClick="$('#SelectedApi').text($(this).attr('value'))">api/cms/GetArticle</a>
+                  </li>
+                  <li>
+                    <a value="api/cms/GetArticleList" onClick="$('#SelectedApi').text($(this).attr('value'))">api/cms/GetArticleList</a>
+                  </li>
+                  <li>
+                    <a value="api/cms/CreateGoodsKillCms" onClick="$('#SelectedApi').text($(this).attr('value'))">api/cms/CreateGoodsKillCms</a>
+                  </li>
+                  <li>
+                    <a value="api/cms/GetGoodsList" onClick="$('#SelectedApi').text($(this).attr('value'))">api/cms/GetGoodsList</a>
+                  </li>
+                  <li>
+                    <a value="api/cms/GetRecommendGoodsList" onClick="$('#SelectedApi').text($(this).attr('value'))">api/cms/GetRecommendGoodsList</a>
+                  </li>
+                  <li>
+                    <a value="system/CreateUser" onClick="$('#SelectedApi').text($(this).attr('value'))">system/CreateUser</a>
+                  </li>
+                  <li>
+                    <a value="system/LoginUser" onClick="$('#SelectedApi').text($(this).attr('value'))">system/LoginUser</a>
+                  </li>
+                </ul>
+              </div>
+              <input style="font-size: 30px;font-family: sans-serif;" type="text" class="form-control" aria-label="..." id="FromData" value="{}">
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button" onClick="test()">Try!</button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--<div class="panel panel-warning">
+    <div class="panel-heading">
+      <h3 class="panel-title">upload- /Unit/uploadfile</h3>
+    </div>
+    <div class="panel-body">
+      <form onsubmit="return false;" class="navbar-form navbar-left" role="search" action="Unit/uploadfile" id="Fromuploadfile"
+        method="post" enctype="multipart/form-data">
+        <div class="form-group ">
+          <input type="file" id="fileid" placeholder="Search" name="avatarimg" style="display:none">
+          <button type="button" class="btn btn-success" onClick="selectedFile()">选择上传文件</button>
+          <button type="submit" class="btn btn-info" onClick="uploadfile()">上传</button>
+        </div>
+      </form>
+    </div>
+  </div>-->
+
+  <div class="panel panel-success">
+    <div class="panel-heading">
+      <h3 class="panel-title">Response</h3>
+    </div>
+    <div class="panel-body">
+      <pre id="Response" style="font-size:22px;word-break: break-all;white-space: pre-wrap;" class="prettyprint">...</pre>
+    </div>
+  </div>
+
+  <!--<div class="panel panel-success">
+      <div class="panel-heading">
+        <h3 class="panel-title">socket.io</h3>
+      </div>
+      <div class="panel-body">
+          <div class="row">
+              <div class="col-lg-6">
+                  <div class="input-group">
+                    <input type="text" class="form-control" id="Chat" placeholder="placeholder for...">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" onClick="socketioSend()" type="button">Send</button>
+                    </span>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>-->
+
+  </div>
+  <script src="/javascripts/jquery.min.js"></script>
+  <script src="/javascripts/bootstrap.min.js"></script>
+  <script src="/javascripts/jquery.form.min.js"></script>
+  <script src="/javascripts/socket.io.js"></script>
+  <script src="/javascripts/prettify.js"></script>
+  <script>
+    var socket = io();
+    function test() {
+      var api = $('#SelectedApi').text();
+      var data = $('#FromData').val();
+      var type = $("#methods").text();
+      var params = {
+        type: type,
+        url: api,
+        error: function (XMLHttpReuqest, textStautus, errothrown) {
+          $("#Response").html(`<div>${(XMLHttpReuqest)}</div>`)
+        },
+        success: function (json) {
+          var responsetext = JSON.stringify(json)
+          $("#Response").html(`<div>${(responsetext)}</div>`)
+        }
+      };
+      if(api === 'Api'){
+        params.url = $("#apimenu").find("li").eq(1).find('a').attr('value')
+      }
+      if (data.length > 0 && JSON.stringify(data) != '{}' && data !== '') {
+        try {
+          params.data = JSON.parse(data)
+        } catch (error) {
+          return $("#Response").text(JSON.stringify('JSON数据格式有误'))
+        }
+      }
+      $.ajax(params)
+    }
+
+    function uploadfile() {
+      $("#Fromuploadfile").ajaxSubmit({
+        success: function (res) {
+          $("#Response").text(JSON.stringify(res))
+          return false;
+        },
+        error: function (err) {
+          $("#Response").text(JSON.stringify(err))
+          return false;
+        }
+      })
+    }
+
+    function selectedFile() {
+      $("#fileid").click();
+    }
+    function socketioSend(){
+      var msg = $("#Chat").val();
+      socket.emit('SendChat', msg);
+    }
+
+    socket.on('SendChat', function(msg){
+      var username = "Awei：";
+      $('#Response').append($('<p>').text(username+msg));
+    });
+  </script>
+</body>
+
+</html>
