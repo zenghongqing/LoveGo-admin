@@ -15,6 +15,11 @@ module.exports = (app) => {
     router.post('/uploadfile', upload.single('file'), controller.UploadFile)
     router.post('/LoginUser', controller.LoginUser)
     router.post('/GetAdminInfo', controller.GetAdminInfo)
+    // 获取管理员列表
+    router.post('/GetAdminList', controller.GetAdminList)
+    router.post('/AuthorizedAdmin', controller.AuthorizedAdmin)
+    router.post('/DeleteAdmin', controller.DeleteAdmin)
+    router.post('/EditAdminInfo', controller.EditAdmin)
     // 后台管理用户模块
     router.post('/GetUserList', controller.GetUserList)
     app.use(router.routes()).use(router.allowedMethods())

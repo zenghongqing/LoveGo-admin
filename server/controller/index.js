@@ -2,6 +2,7 @@ const Sys = require('../models/admin')
 const Admin = Sys.Admin
 // const path = require('path')
 const md5 = require('md5')
+const { permissionValidate } = require('./validate')
 // const qs = require('qs')
 // 保存管理员信息
 const CreateUser = async (ctx, next) => {
@@ -92,10 +93,143 @@ const GetUserList = async (ctx, next) => {
     ctx.status = 200
     ctx.success = true
 }
+// 获取管理员列表
+const GetAdminList = async (ctx, next) => {
+    const params = JSON.parse(ctx.request.body)
+    let adminInfo = await permissionValidate(ctx, params.AdminToken, ['root'])
+    if (adminInfo && !adminInfo.message) {
+        let adminList = await Admin.find({}, {
+            __v: 0,
+            password: 0
+        })
+        if (!adminList) {
+            ctx.body = {
+                msg: '用户信息不存在'
+            }
+        } else {
+            ctx.body = adminList
+        }
+    } else {
+        ctx.body = {
+            msg: adminInfo.message
+        }
+    }
+    ctx.success = true
+    ctx.status = 200
+}
+// 管理员审核
+const AuthorizedAdmin = async (ctx, next) => {
+    let params = JSON.parse(ctx.request.body)
+    let adminInfo = await permissionValidate(ctx, params.rootId, ['root'])
+    if (adminInfo && !adminInfo.message) {
+        let authorizeMsg = await Admin.updateOne({
+            _id: params.othersId
+        }, {
+            status: params.status
+        }, {
+            upsert: false
+        })
+        if (!authorizeMsg) {
+            ctx.body = {
+                msg: '用户信息不存在'
+            }
+        } else {
+            ctx.body = adminInfo
+        }
+    } else {
+        ctx.body = {
+            msg: adminInfo.message
+        }
+    }
+    ctx.status = 200
+    ctx.success = true
+}
+// 删除管理员
+const DeleteAdmin = async (ctx, next) => {
+    let params = JSON.parse(ctx.request.body)
+    if (!params.AdminToken) {
+        ctx.body = {}
+    }
+    let adminInfo = await permissionValidate(ctx, params.AdminToken, ['root'])
+    if (adminInfo && !adminInfo.message) {
+        let adminList = await Admin.deleteOne({
+            _id: params.AdminToken
+        })
+        if (!adminList) {
+            ctx.body = {
+                msg: '用户信息不存在'
+            }
+        } else {
+            ctx.body = adminList
+        }
+    } else {
+        ctx.body = {
+            msg: adminInfo.message
+        }
+    }
+    ctx.status = 200
+    ctx.success = true
+}
+// 编辑管理员
+const EditAdmin = async (ctx, next) => {
+    let params = JSON.parse(ctx.request.body)
+    if (!params.TargetId || !params.AdminToken) {
+        ctx.success = false
+    }
+    let UpdatedData = {}
+    if (params.roles) {
+        UpdatedData.roles = params.roles
+    }
+    if (params.phone) {
+        UpdatedData.phone = params.phone
+    }
+    if (params.province) {
+        UpdatedData.province = params.province
+    }
+    if (params.city) {
+        UpdatedData.city = params.city
+    }
+    if (params.area) {
+        UpdatedData.area = params.area
+    }
+    if (params.address) {
+        UpdatedData.address = params.address
+    }
+    if (params.status) {
+        UpdatedData.status = params.status
+    }
+    let adminInfo = await permissionValidate(ctx, params.AdminToken, ['root'])
+    if (adminInfo && !adminInfo.message) {
+        console.log(params.TargetId, UpdatedData, 'editInfo')
+        let editInfo = await Admin.updateOne({
+            _id: params.TargetId
+        }, UpdatedData, {
+            upsert: false
+        })
+        if (!editInfo) {
+            ctx.body = {
+                msg: '用户信息不存在'
+            }
+        } else {
+            ctx.body = editInfo
+        }
+    } else {
+        ctx.body = {
+            msg: '用户信息不存在'
+        }
+        ctx.success = false
+    }
+    ctx.status = 200
+    ctx.success = true
+}
 module.exports = {
     CreateUser,
     UploadFile,
     LoginUser,
     GetAdminInfo,
-    GetUserList
+    GetUserList,
+    GetAdminList,
+    AuthorizedAdmin,
+    DeleteAdmin,
+    EditAdmin
 }

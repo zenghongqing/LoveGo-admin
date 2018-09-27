@@ -19,6 +19,7 @@ router.beforeEach((to, from, next) => {
                     next()
                 })
             } else {
+                console.log(store.getters.userData.roles, 'roles')
                 if (to.path.indexOf('/senior') > -1 && store.getters.userData.roles !== 'root') {
                     Message.error('用户权限不足, 无法进入')
                     NProgress.done()

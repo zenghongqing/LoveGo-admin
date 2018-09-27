@@ -21,7 +21,7 @@
                 <el-input v-model="Form.phone"></el-input>
             </el-form-item>
             <el-form-item label="权限" prop="permission" label-width="80px">
-                <el-select v-model="Form.selectedPermission" placeholder="请选择">
+                <el-select @change="selectRoles" v-model="Form.selectedPermission" placeholder="请选择">
                     <el-option v-for="item in Form.cities" :key="item.value" :label="item.label" :value="item.value">
                         <span style="float: left">{{ item.label }}</span>
                         <span style="float: right;color:#8492a6;font-size:13px">{{ item.value }}</span>
@@ -103,6 +103,9 @@ export default {
     components: {
         VDistpicker
     },
+    created () {
+        console.log(this.Form.selectedPermission, 'permission')
+    },
     methods: {
         /**
          * 选择省市区
@@ -135,6 +138,12 @@ export default {
         },
         handleAvatarSuccess (res, file) {
             this.Form.imageUrl = file.response.filePath
+        },
+        /**
+         * @description 选择权限
+        */
+        selectRoles (role) {
+            this.Form.selectedPermission = role
         },
         addAdmin () {
             if (!this.Form.selectedPermission) return this.$message.error('请选择权限')

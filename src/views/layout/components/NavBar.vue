@@ -4,7 +4,7 @@
         <bread-crumb-component></bread-crumb-component>
         <el-dropdown class="avatar-container" trigger="click">
             <div class="avatar-wrapper">
-                <!-- <img class="user-avatar" :src="userData.photo_url"> -->
+                <img class="user-avatar" :src="userData.photo_url">
                 <i class="el-icon-caret-bottom"></i>
             </div>
             <el-dropdown-menu class="user-dropdown" slot="dropdown">
@@ -35,7 +35,8 @@ export default {
     },
     computed: {
         ...mapGetters([
-            'sidebar'
+            'sidebar',
+            'userData'
         ])
     },
     components: {
@@ -43,10 +44,14 @@ export default {
         BreadCrumbComponent
     },
     created () {
-        console.log(this.sidebar.opened)
+        console.log(this.userData, 'userData')
     },
     methods: {
-        logout () {},
+        logout () {
+            this.$store.dispatch('LogOut').then(() => {
+                location.reload()
+            })
+        },
         toggleSideBar () {
             this.$store.dispatch('ToggleSideBar')
         }

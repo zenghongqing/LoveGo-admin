@@ -1,5 +1,5 @@
-import { setToken } from '@/utils/auth'
-import { createUser } from '@/api/admin'
+import { setToken, removeToken } from '@/utils/auth'
+import { createUser, getAdminList, authorizedAdmin, deleteAdmin, getAdminInfo, editAdminInfo } from '@/api/admin'
 import { login, getInfo } from '@/api/login'
 const admin = {
     state: {
@@ -10,6 +10,7 @@ const admin = {
         SET_USER_DATA: (state, userData) => {
             state.userData = userData
         },
+        // 管理员列表数据
         SET_ADMIN_DATA: (state, adminData) => {
             state.adminData = adminData
         }
@@ -43,6 +44,7 @@ const admin = {
         LogOut ({commit, state}) {
             return new Promise((resolve, reject) => {
                 commit('SET_USER_DATA', null)
+                removeToken()
                 resolve()
             })
         },
@@ -58,23 +60,63 @@ const admin = {
         },
         // 管理员列表
         AdminList ({commit, state}, formData) {
-            return new Promise((resolve, reject) => {})
+            return new Promise((resolve, reject) => {
+                getAdminList(formData).then(res => {
+                    if (res) {
+                        commit('SET_ADMIN_DATA', res)
+                        resolve(res)
+                    }
+                }).catch(e => {
+                    reject(e)
+                })
+            })
         },
         // 编辑管理员
         EditAdminInfo ({commit, state}, formData) {
-            return new Promise((resolve, reject) => {})
+            return new Promise((resolve, reject) => {
+                editAdminInfo(formData).then(res => {
+                    if (res) {
+                        resolve(res)
+                    }
+                }).catch(e => {
+                    reject(e)
+                })
+            })
         },
         // 审核管理员
         AuthorizedAdmin ({commit, state}, formData) {
-            return new Promise((resolve, reject) => {})
+            return new Promise((resolve, reject) => {
+                authorizedAdmin(formData).then(res => {
+                    if (res && !res.msg) {
+                        resolve()
+                    }
+                }).catch(e => {
+                    reject(e)
+                })
+            })
         },
-        // 管理员信息
+        // 获取管理员信息
         AdminInfo ({commit, state}, formData) {
-            return new Promise((resolve, reject) => {})
+            return new Promise((resolve, reject) => {
+                getAdminInfo(formData).then(res => {
+                    if (res) {
+                        resolve(res)
+                    }
+                }).catch(e => {
+                    reject(e)
+                })
+            })
         },
         // 删除管理员
         DeleteAdmin ({commit, state}, formData) {
-            return new Promise((resolve, reject) => {})
+            return new Promise((resolve, reject) => {
+                deleteAdmin(formData).then(res => {
+                    console.log(res)
+                    resolve()
+                }).catch(e => {
+                    reject(e)
+                })
+            })
         },
         // 统计信息
         GetStatisData ({commit, state}, formData) {

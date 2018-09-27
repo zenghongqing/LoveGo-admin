@@ -6,3 +6,38 @@ export function createUser (params) {
         data: JSON.stringify(params)
     })
 }
+export function getAdminList (params) {
+    return request({
+        url: '/api/GetAdminList',
+        method: 'post',
+        data: JSON.stringify(params)
+    })
+}
+export function authorizedAdmin (params) {
+    return request({
+        url: '/api/AuthorizedAdmin',
+        method: 'post',
+        data: params
+    })
+}
+export function deleteAdmin (params) {
+    return request({
+        url: '/api/DeleteAdmin',
+        method: 'post',
+        data: params
+    })
+}
+export function getAdminInfo (params) {
+    return request({
+        url: '/api/GetAdminInfo',
+        method: 'post',
+        data: params
+    })
+}
+export function editAdminInfo (params) {
+    return request({
+        url: '/api/EditAdminInfo',
+        method: 'post',
+        data: params
+    })
+}
