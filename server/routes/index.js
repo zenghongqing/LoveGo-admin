@@ -1,5 +1,6 @@
 const Router = require('koa-router')
 const controller = require('../controller')
+const shop = require('../controller/shop')
 const router = new Router()
 const upload = require('./upload')
 // const checkToken = require('../token/checkToken')
@@ -20,6 +21,9 @@ module.exports = (app) => {
     router.post('/AuthorizedAdmin', controller.AuthorizedAdmin)
     router.post('/DeleteAdmin', controller.DeleteAdmin)
     router.post('/EditAdminInfo', controller.EditAdmin)
+    // 店铺管理
+    router.post('/CreateShop', shop.CreateShop)
+    router.post('/GetShopList', shop.GetShopList)
     // 后台管理用户模块
     router.post('/GetUserList', controller.GetUserList)
     app.use(router.routes()).use(router.allowedMethods())

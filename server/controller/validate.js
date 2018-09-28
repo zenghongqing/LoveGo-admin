@@ -19,3 +19,10 @@ exports.permissionValidate = (ctx, AdminToken, permissionList) => {
         })
     })
 }
+exports.GenerateChallengecode = (maxLength) => { // 生成指定位数位随机验证码
+    var Challengecode = ''
+    for (var i = 0; i < maxLength; i++) {
+        Challengecode += Math.floor(Math.random() * 10)
+    }
+    return Challengecode
+}

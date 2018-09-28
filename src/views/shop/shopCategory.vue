@@ -1,3 +1,5 @@
 <template>
-    <div class="shop-category"></div>
+    <div class="shop-category">
+        aaas
+    </div>
 </template>

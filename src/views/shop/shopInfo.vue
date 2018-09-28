@@ -1,10 +1,10 @@
 <template>
-    <div class="shop-container">
+    <div class="shop-container" v-loading.fullscreen.lock="fullscreenLoading">
         <el-table highlight-current-row header-align="center" align=center :data="tableData" border style="width: 100%">
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column prop="shop_logo" label="店铺LOGO">
                 <template slot-scope="scope">
-                    <img style="width:80px;cursor:pointer" src=""/>
+                    <img style="width:80px;cursor:pointer" :src="scope.row.shop_logo"/>
                 </template>
             </el-table-column>
             <el-table-column prop="id" label="店铺编号"></el-table-column>
@@ -15,17 +15,66 @@
             <el-table-column prop="shop_score" label="店铺综合评分"></el-table-column>
             <el-table-column prop="shop_create_date" label="创建时间"></el-table-column>
             <el-table-column label="操作" width="300px">
-                <template slot-scope="scope"></template>
+                <template slot-scope="scope">
+                    <el-button @click="()=>$router.push('/shop/shopCategory/'+scope.row.id)" size="mini" type="primary">分类管理</el-button>
+                    <el-button @click="()=>$router.push('/goods/addGoods/'+scope.row.id)" size="mini" type="primary">添加商品</el-button>
+                    <el-button @click="()=>$router.push('/shop/editShop/'+scope.row.id)" size="mini" type="default">编辑</el-button>
+                    <el-button @click="deleteShop(scope.row.id)" size="mini" type="danger" plain>删除</el-button>
+                </template>
             </el-table-column>
         </el-table>
     </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 export default {
     data () {
         return {
-            tableData: []
+            tableData: [],
+            fullscreenLoading: false,
+            dataParams: {
+                pageIndex: 1,
+                pageSize: 100
+            }
         }
+    },
+    computed: {
+        ...mapGetters([
+            'shopData'
+        ])
+    },
+    mounted () {
+        this.initData()
+    },
+    methods: {
+        async updateData () {
+            let data = await this.$store.dispatch('GetShopList', this.dataParams)
+            return this.setData(data)
+        },
+        setData (res) {
+            this.tableData = []
+            this.fullscreenLoading = false
+            console.log(res, '21323')
+            if (res && res.data && res.data.data) {
+                res.data.data.map(i => {
+                    this.tableData.push({
+                        id: i.id,
+                        shop_logo: i.shop_logo[0],
+                        goods_total_num: i.goods_total_num,
+                        shop_summary: i.shop_summary,
+                        like_count: i.like_count,
+                        shop_name: i.shop_name,
+                        shop_score: parseFloat((i.shop_score.service + i.shop_score.ship) / 3),
+                        shop_create_date: i.shop_create_date
+                    })
+                })
+            }
+        },
+        initData () {
+            this.fullscreenLoading = true
+            if (!this.shopData) return this.updateData()
+        },
+        deleteShop (id) {}
     }
 }
 </script>

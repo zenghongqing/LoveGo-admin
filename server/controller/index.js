@@ -52,7 +52,6 @@ const LoginUser = async (ctx, next) => {
         __v: 0,
         password: 0
     }).then(res => {
-        console.log(res)
         let msg = ''
         if (!res) {
             msg = '用户信息不存在'
@@ -82,7 +81,6 @@ const GetAdminInfo = async (ctx, next) => {
 }
 // 获取用户信息列表
 const GetUserList = async (ctx, next) => {
-    console.log(ctx.request.body)
     const params = JSON.parse(ctx.request.body)
     if (!params.pageIndex || params.pageIndex <= 0 || !params.pageSize) {
         return console.error('页码不对')
@@ -200,7 +198,6 @@ const EditAdmin = async (ctx, next) => {
     }
     let adminInfo = await permissionValidate(ctx, params.AdminToken, ['root'])
     if (adminInfo && !adminInfo.message) {
-        console.log(params.TargetId, UpdatedData, 'editInfo')
         let editInfo = await Admin.updateOne({
             _id: params.TargetId
         }, UpdatedData, {

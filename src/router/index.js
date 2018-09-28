@@ -85,7 +85,7 @@ const constantRouterMap = [
                 }
             },
             {
-                path: 'shopCategory',
+                path: 'shopCategory/:id',
                 name: 'shopCategory',
                 hidden: true,
                 component: _import('shop/shopCategory'),
@@ -95,7 +95,7 @@ const constantRouterMap = [
                 }
             },
             {
-                path: 'editShop',
+                path: 'editShop/:id',
                 name: 'editShop',
                 hidden: true,
                 component: _import('shop/editShop'),
