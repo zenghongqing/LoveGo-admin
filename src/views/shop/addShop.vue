@@ -41,14 +41,14 @@ export default {
     },
     methods: {
         successUploadLogo (response, file, fileList) {
-            this.uploadFile.uploadLogo = file.response.filePath
+            this.uploadFile.uploadLogo = [{url: file.response.filePath}]
         },
         successUploadBanner (response, file, fileList) {
             let imgArr = []
             fileList.forEach(function (item) {
                 console.log(item.response, 'response')
                 if (item.response && item.response.filePath) {
-                    imgArr.push(item.response.filePath)
+                    imgArr.push({url: item.response.filePath})
                 }
             })
             console.log(fileList, imgArr, 'fileList')
@@ -69,9 +69,6 @@ export default {
                 shop_summary: this.Form.shop_summary,
                 shop_logo: this.uploadFile.uploadLogo,
                 cms_banner: this.uploadFile.uploadBanner
-            }
-            if (this.Form.newContent) {
-                FormData.cms_content = this.Form.newContent
             }
             this.$store.dispatch('CreateShop', FormData).then(res => {
                 this.fullscreenLoading = false

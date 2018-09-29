@@ -13,3 +13,17 @@ export function getShopList (params) {
         data: params
     })
 }
+export function getShopInfo (params) {
+    return request({
+        url: '/api/GetShopInfo',
+        method: 'post',
+        data: params
+    })
+}
+export function editShop (params) {
+    return request({
+        url: '/api/EditShop',
+        method: 'post',
+        data: params
+    })
+}

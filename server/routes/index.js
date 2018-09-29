@@ -24,6 +24,8 @@ module.exports = (app) => {
     // 店铺管理
     router.post('/CreateShop', shop.CreateShop)
     router.post('/GetShopList', shop.GetShopList)
+    router.post('/GetShopInfo', shop.GetShopInfo)
+    router.post('/EditShop', shop.EditShop)
     // 后台管理用户模块
     router.post('/GetUserList', controller.GetUserList)
     app.use(router.routes()).use(router.allowedMethods())

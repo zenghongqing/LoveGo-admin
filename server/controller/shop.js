@@ -1,6 +1,6 @@
 const Shop = require('../models/shop')
 const ShopInfo = Shop.Shop // 店铺信息
-const { GenerateChallengecode } = require('./validate')
+const { GenerateChallengecode, permissionValidate } = require('./validate')
 const CreateShop = async (ctx, next) => {
     const params = JSON.parse(ctx.request.body)
     console.log(params, 'shop')
@@ -43,6 +43,7 @@ const CreateShop = async (ctx, next) => {
         ctx.success = false
     }
 }
+// 获取店铺列表信息
 const GetShopList = async (ctx, next) => {
     let params = JSON.parse(ctx.request.body)
     if (!params.pageIndex || !params.pageSize || params.pageIndex <= 0) {
@@ -67,7 +68,61 @@ const GetShopList = async (ctx, next) => {
         ctx.success = false
     }
 }
+// 获取店铺信息
+const GetShopInfo = async (ctx, next) => {
+    let params = JSON.parse(ctx.request.body)
+    try {
+        let data = await ShopInfo.findOne({
+            id: params.ShopId
+        })
+        if (data) {
+            ctx.body = data
+            ctx.success = true
+            ctx.status = 200
+        }
+    } catch (e) {
+        ctx.body = e
+        ctx.sucess = false
+    }
+}
+// 编辑保存店铺信息
+const EditShop = async (ctx, next) => {
+    let params = JSON.parse(ctx.request.body)
+    if (!params.Id || !params.AdminToken) {
+        ctx.success = false
+    }
+    let editData = {
+        shop_name: params.shop_name || '',
+        shop_logo: params.shop_logo || [],
+        cms_content: params.cms_content !== '' && params.cms_content !== 'null' ? params.cms_content : '',
+        category_info: params.category_info || [],
+        cms_banner: params.cms_banner || [],
+        goods_total_num: 0,
+        goods_list: params.goods_list || [],
+        shop_summary: params.shop_summary || ''
+    }
+    let shopData = await permissionValidate(ctx, params.AdminToken, ['root', 'admin']).then()
+    if (shopData && !shopData.msg) {
+        try {
+            let data = await ShopInfo.updateOne({
+                id: params.Id
+            }, editData, {
+                upsert: false
+            })
+            console.log(data, 'shopData')
+            // ctx.body = {}
+            ctx.success = true
+            ctx.status = 200
+        } catch (e) {
+            ctx.success = false
+        }
+    } else {
+        ctx.success = false
+    }
+}
 module.exports = {
     CreateShop,
-    GetShopList
+    GetShopList,
+    GetShopInfo,
+    EditShop
 }

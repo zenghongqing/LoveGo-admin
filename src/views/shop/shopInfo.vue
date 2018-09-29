@@ -59,7 +59,7 @@ export default {
                 res.data.data.map(i => {
                     this.tableData.push({
                         id: i.id,
-                        shop_logo: i.shop_logo[0],
+                        shop_logo: i.shop_logo[0].url,
                         goods_total_num: i.goods_total_num,
                         shop_summary: i.shop_summary,
                         like_count: i.like_count,
@@ -73,6 +73,7 @@ export default {
         initData () {
             this.fullscreenLoading = true
             if (!this.shopData) return this.updateData()
+            this.setData(this.shopData)
         },
         deleteShop (id) {}
     }
