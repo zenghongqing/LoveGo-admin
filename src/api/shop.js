@@ -27,3 +27,31 @@ export function editShop (params) {
         data: params
     })
 }
+export function deleteShop (params) {
+    return request({
+        url: '/api/DeleteShop',
+        method: 'post',
+        data: params
+    })
+}
+export function editShopCategory (params) {
+    return request({
+        url: '/api/EditShopCategory',
+        method: 'post',
+        data: params
+    })
+}
+export function addShopCategory (params) {
+    return request({
+        url: '/api/AddShopCategory',
+        method: 'post',
+        data: params
+    })
+}
+export function deleteShopCategory (params) {
+    return request({
+        url: '/api/DeleteShopCategory',
+        method: 'post',
+        data: params
+    })
+}

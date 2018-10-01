@@ -27,6 +27,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import { getToken } from '@/utils/auth'
 export default {
     data () {
         return {
@@ -54,7 +55,6 @@ export default {
         setData (res) {
             this.tableData = []
             this.fullscreenLoading = false
-            console.log(res, '21323')
             if (res && res.data && res.data.data) {
                 res.data.data.map(i => {
                     this.tableData.push({
@@ -75,7 +75,28 @@ export default {
             if (!this.shopData) return this.updateData()
             this.setData(this.shopData)
         },
-        deleteShop (id) {}
+        /**
+         * @description 删除该店铺
+        */
+        deleteShop (Id) {
+            this.$confirm('此操作将删除该店铺的全部信息, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.fullscreenLoading = true
+                this.$store.dispatch('DeleteShop', {
+                    ShopId: Id,
+                    AdminToken: getToken()
+                }).then(res => {
+                    this.updateData()
+                    this.fullscreenLoading = false
+                }, err => {
+                    console.log(err)
+                    this.fullscreenLoading = false
+                })
+            })
+        }
     }
 }
 </script>

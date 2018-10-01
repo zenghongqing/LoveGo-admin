@@ -6,7 +6,6 @@ exports.permissionValidate = (ctx, AdminToken, permissionList) => {
         }, {
             password: 0
         }).then(adminInfo => {
-            console.log(adminInfo, '111')
             if (!adminInfo) {
                 return resolve({msg: '用户信息不存在'})
             }

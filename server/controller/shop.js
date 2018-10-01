@@ -3,8 +3,7 @@ const ShopInfo = Shop.Shop // 店铺信息
 const { GenerateChallengecode, permissionValidate } = require('./validate')
 const CreateShop = async (ctx, next) => {
     const params = JSON.parse(ctx.request.body)
-    console.log(params, 'shop')
-    if (!params.shop_name || !params.shop_logo || !params.shop_logo || !params.cms_content || !params.shop_summary) {
+    if (!params.shop_name || !params.shop_logo || !params.cms_banner || !params.shop_summary) {
         ctx.success = false
         ctx.body = ''
         return
@@ -80,6 +79,10 @@ const GetShopInfo = async (ctx, next) => {
             ctx.success = true
             ctx.status = 200
         }
+        // 测试删除无用的数据库数据
+        // await ShopInfo.remove({id: params.ShopId})
+        // ctx.success = true
+        // ctx.status = 200
     } catch (e) {
         ctx.body = e
         ctx.sucess = false
@@ -104,13 +107,11 @@ const EditShop = async (ctx, next) => {
     let shopData = await permissionValidate(ctx, params.AdminToken, ['root', 'admin']).then()
     if (shopData && !shopData.msg) {
         try {
-            let data = await ShopInfo.updateOne({
+            await ShopInfo.updateOne({
                 id: params.Id
             }, editData, {
                 upsert: false
             })
-            console.log(data, 'shopData')
-            // ctx.body = {}
             ctx.success = true
             ctx.status = 200
         } catch (e) {
@@ -120,9 +121,103 @@ const EditShop = async (ctx, next) => {
         ctx.success = false
     }
 }
+const DeleteShop = async (ctx, next) => {
+    let params = JSON.parse(ctx.request.body)
+    let deleteMsg = await permissionValidate(ctx, params.AdminToken, ['root', 'admin'])
+    if (deleteMsg && !deleteMsg.message) {
+        try {
+            await ShopInfo.deleteOne({
+                id: params.ShopId
+            })
+            ctx.success = true
+            ctx.status = 200
+        } catch (e) {
+            ctx.body = e
+            ctx.success = false
+        }
+    } else {
+        ctx.success = false
+    }
+}
+const EditShopCategory = async (ctx, next) => {
+    let params = JSON.parse(ctx.request.body)
+    if (!params.id || !params.categoryId || !params.category_info || !params.AdminToken) {
+        ctx.success = false
+        return
+    }
+    let editCateMsg = await permissionValidate(ctx, params.AdminToken, ['root', 'admin'])
+    if (editCateMsg && !editCateMsg.msg) {
+        try {
+            await ShopInfo.updateOne({
+                id: params.id,
+                'category_info.Id': params.categoryId
+            }, {
+                $set: {
+                    'category_info.$': params.category_info
+                }
+            }, {
+                upsert: false
+            })
+            ctx.success = true
+            ctx.status = 200
+        } catch (e) {
+            ctx.success = false
+        }
+    } else {
+        ctx.success = false
+    }
+}
+const AddShopCategory = async (ctx, next) => {
+    const params = JSON.parse(ctx.request.body)
+    if (!params.id || !params.category_info) {
+        ctx.success = false
+    }
+    params.category_info.Id = Number(GenerateChallengecode(5))
+    console.log(params, 'params11')
+    try {
+        // await ShopInfo.updateOne({id: params.id}, {
+        //     $push: {
+        //         'category_info': params.category_info
+        //     }
+        // }, {
+        //     upsert: false
+        // })
+        ctx.status = 200
+        ctx.success = true
+    } catch (e) {
+        ctx.body = e
+        ctx.success = false
+    }
+}
+const DeleteShopCategory = async (ctx, next) => {
+    const params = JSON.parse(ctx.request.body)
+    if (!params.AdminToken || !params.categoryId || !params.Id) {
+        ctx.success = false
+        return
+    }
+    let deleteCatMsg = await permissionValidate(ctx, params.AdminToken, ['root', 'admin'])
+    if (deleteCatMsg && !deleteCatMsg.message) {
+        try {
+            await ShopInfo.updateOne({id: params.Id}, {
+                $pull: {
+                    'category_info': {Id: params.categoryId}
+                }
+            })
+            ctx.status = 200
+            ctx.success = true
+        } catch (e) {
+            ctx.body = e
+            ctx.success = false
+        }
+    }
+}
 module.exports = {
     CreateShop,
     GetShopList,
     GetShopInfo,
-    EditShop
+    EditShop,
+    DeleteShop,
+    EditShopCategory,
+    AddShopCategory,
+    DeleteShopCategory
 }
