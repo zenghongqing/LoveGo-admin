@@ -20,7 +20,7 @@
             </el-form-item>
             <el-form-item id="uploadBanner" label="店铺轮播图" label-width="120px">
                 <el-upload action="/api/uploadfile" list-type="picture-card" ref="uploadBanner" :multiple="true" :limit="5"
-                :file-list="uploadFile.uploadBanner" :on-remove="successUploadBanner" :onSuccess="successUploadBanner" on-onExceed="() => {$message.error('图片不超过五张')}">
+                :file-list="uploadFile.uploadBanner" :onSuccess="successUploadBanner" on-onExceed="() => {$message.error('图片不超过五张')}">
                     <i class="el-icon-plus"></i>
                 </el-upload>
             </el-form-item>

@@ -4,6 +4,7 @@ import app from './modules/app'
 import admin from './modules/admin'
 import user from './modules/user'
 import shop from './modules/shop'
+import goods from './modules/goods'
 import getters from './getters'
 Vue.use(Vuex)
 
@@ -12,7 +13,8 @@ export default new Vuex.Store({
         app,
         admin,
         user,
-        shop
+        shop,
+        goods
     },
     getters
 })

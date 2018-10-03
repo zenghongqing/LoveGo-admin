@@ -1,5 +1,5 @@
 <template>
-    <div class="edit-container">
+    <div class="edit-container" v-loading.fullscreen.lock="fullscreenLoading">
         <el-form :model="Form" ref="ruleForm" label-position="left" class="card-box admin-form">
             <el-form-item label="店铺Id" prop="shopId" label-width="80px" v-if="$route.params.shopId && $route.params.shopId !== ':shopId'">
                 <el-input :disabled="true" v-model="Form.shopId"></el-input>
@@ -27,7 +27,7 @@
                 <el-input v-model.number="Form.price"></el-input>
             </el-form-item>
             <el-form-item label="商品状态" prop="status" label-width="80px">
-                <el-select v-model="Form.status" placeholder="请选择">
+                <el-select @change="selectStatus" :value="Form.status" placeholder="请选择">
                     <el-option v-for="item in Form.GoodsStatus" :key="item.value" :label="item.label" :value="item.value">
                         <span style="float:left;">{{ item.label }}</span>
                         <span style="float:right;color:#8492a6;font-size:13px;">{{ item.value }}</span>
@@ -60,13 +60,11 @@
                 </el-dialog>
             </el-form-item>
             <el-form-item label="商品内容" prop="content" label-with="80px">
-                <vue-html5-editor style="margin: 30px 0;" :content="Form.content" :auto-height="true" @change="content => Form.newContent=content"></vue-html5-editor>
+                <vue-html5-editor style="margin: 30px 0;" :content="Form.content" :auto-height="true" @change="updateData"></vue-html5-editor>
             </el-form-item>
-            <el-form-item label="轮播图" prop="avatar" label-width="80px">
-                <el-upload action="/" list-type="picture-card" ref="uploadImages" :multiple="true" :limit="5"
-                :file-list="uploadFile.uploadImageList" :autoUpload="false" :on-remove="handleUploadRemove"
-                :onPreview="handlePictureCardPreview" :onSuccess="handleUploadSuccess"
-                :onExceed="()=>{$message.error('商品轮播图不能超过五张')}">
+            <el-form-item id="uploadBanner" label="店铺轮播图" label-width="120px">
+                <el-upload action="/api/uploadfile" list-type="picture-card" ref="uploadBanner" :multiple="true" :limit="5"
+                :file-list="uploadFile.uploadBanner" :onSuccess="successUploadBanner" on-onExceed="() => {$message.error('图片不超过五张')}">
                     <i class="el-icon-plus"></i>
                 </el-upload>
             </el-form-item>
@@ -80,10 +78,11 @@
 export default {
     data () {
         return {
+            fullscreenLoading: false,
             uploadFile: {
-                dialogImageUrl: '',
-                dialogVisible: false,
-                uploadImageList: []
+                // dialogImageUrl: '',
+                // dialogVisible: false,
+                // uploadBanner: []
             },
             categoryData: {// 商品分类
                 categoryTree: [{
@@ -96,7 +95,7 @@ export default {
                     }]
                 }],
                 defaultCategory: {
-                    Id: [],
+                    Id: [1],
                     label: ''
                 },
                 dialogTreeVisible: false
@@ -121,12 +120,121 @@ export default {
             }
         }
     },
+    mounted () {
+        this.initData()
+    },
     methods: {
-        handleNodeClick () {},
-        handleUploadRemove () {},
-        handlePictureCardPreview () {},
-        handleUploadSuccess () {},
-        addGoods () {}
+        initData () {
+            if (!this.$route.params.shopId) {
+                this.Message({
+                    message: '店铺id不能为空',
+                    type: 'error',
+                    duration: 2000
+                })
+                this.$router.go(-1)
+            }
+            this.Form.shopId = this.$route.params.shopId
+            const categoryData = this.$store.dispatch('GetAllCategory')
+            let List = []
+            if (categoryData && categoryData.length) {
+                categoryData.map((item, index, array) => {
+                    if (item.Id === this.categoryData.defaultCategory.Id[0]) {
+                        this.categoryData.defaultCategory.label = `${item.name} [${item.Id}]`
+                    }
+                    if (item.parentId === 0) {
+                        List.push({
+                            label: item.name,
+                            id: item.Id,
+                            parentId: item.parentId,
+                            desc: item.desc,
+                            img_url: item.image_url,
+                            children: []
+                        })
+                    }
+                })
+                List.map((item, index, array) => {
+                    categoryData.map((children1, index, array) => {
+                        if (children1.parentId === item.id) {
+                            item.children.push({
+                                label: children1.name,
+                                id: children1.Id,
+                                parentId: children1.parentId,
+                                desc: children1.desc,
+                                img_url: children1.image_url,
+                                children: []
+                            })
+                        }
+                    })
+                    item.children.map((children2, index, array) => {
+                        categoryData.map((children3, index1, arr) => {
+                            if (children2.id && children3.parentId && children2.id === children3.parentId) {
+                                children2.children.push({
+                                    id: children3.Id,
+                                    label: children3.name,
+                                    parentId: children3.parentId,
+                                    img_url: children3.image_url,
+                                    desc: children3.desc,
+                                    children: []
+                                })
+                            }
+                        })
+                    })
+                })
+                this.categoryData.categoryTree = List
+            }
+        },
+        handleNodeClick (data) {
+            console.log(data, 'data')
+            this.$refs.categoryTree.setCheckedKeys([data.id || ''])
+            this.categoryData.defaultCategory.label = `${data.label}  ${data.id || ''}`
+            this.categoryData.defaultCategory.Id = [data.id || '']
+        },
+        updateData (content) {
+            this.Form.content = content
+        },
+        selectStatus (data) {
+            this.Form.status = data
+        },
+        successUploadBanner (response, file, fileList) {
+            let imgArr = []
+            fileList.forEach(function (item) {
+                if (item.response && item.response.filePath) {
+                    imgArr.push({url: item.response.filePath})
+                }
+            })
+            this.uploadFile.uploadBanner = imgArr
+        },
+        addGoods () {
+            if (!this.Form.status) return this.$message.error('请选择商品状态')
+            if (this.uploadFile.uploadBanner && this.uploadFile.uploadBanner.length === 0) return this.$message.error('请至少上传一张商品轮播图')
+            if (!this.Form.productName) return this.$message.error('请填写商品名称')
+            if (!this.Form.summary) return this.$message.error('请填写商品详情')
+            if (!this.Form.stocks) return this.$message.error('请填写商品库存')
+            if (!this.Form.price) return this.$message.error('请填写商品价格')
+            this.fullscreenLoading = true
+            const FormData = {
+                status: this.Form.status,
+                productName: this.Form.productName,
+                categoryId: this.categoryData.defaultCategory.Id[0],
+                shopId: this.Form.shopId,
+                image_url: this.uploadFile.uploadBanner,
+                content: this.Form.content,
+                summary: this.Form.summary,
+                stocks: this.Form.stocks,
+                price: this.Form.price
+            }
+            this.fullscreenLoading = true
+            this.$store.dispatch('CreateGoods', FormData).then(res => {
+                this.fullscreenLoading = false
+                this.$message.success('添加成功')
+                setTimeout(() => {
+                    this.$router.go(-1)
+                }, 1000)
+            }, err => {
+                console.log(err)
+                this.fullscreenLoading = false
+            })
+        }
     }
 }
 </script>

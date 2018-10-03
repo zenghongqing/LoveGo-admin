@@ -173,15 +173,14 @@ const AddShopCategory = async (ctx, next) => {
         ctx.success = false
     }
     params.category_info.Id = Number(GenerateChallengecode(5))
-    console.log(params, 'params11')
     try {
-        // await ShopInfo.updateOne({id: params.id}, {
-        //     $push: {
-        //         'category_info': params.category_info
-        //     }
-        // }, {
-        //     upsert: false
-        // })
+        await ShopInfo.updateOne({id: params.id}, {
+            $push: {
+                'category_info': params.category_info
+            }
+        }, {
+            upsert: false
+        })
         ctx.status = 200
         ctx.success = true
     } catch (e) {
