@@ -24,6 +24,7 @@ const GetAllCategory = async (ctx, next) => {
 // 保存商品信息
 const CreateGoods = async (ctx, next) => {
     const params = JSON.parse(ctx.request.body)
+    console.log(params, '111')
     if (!params.shopId || !params.status || !params.productName || !params.image_url.length || !params.categoryId || !params.content || !params.summary || !params.price || !params.stocks) {
         ctx.success = false
         return
@@ -76,7 +77,6 @@ const GetGoodsList = async (ctx, next) => {
 }
 const DeleteGoods = async (ctx, next) => {
     const params = JSON.parse(ctx.request.body)
-    console.log(params)
     if (!params.Id || !params.AdminToken) {
         ctx.success = false
         return
@@ -97,9 +97,81 @@ const DeleteGoods = async (ctx, next) => {
     ctx.success = true
     ctx.status = 200
 }
+const GetProduct = async (ctx, next) => {
+    const params = JSON.parse(ctx.request.body)
+    if (!params.productNo) {
+        ctx.success = false
+        return
+    }
+    try {
+        let data = await Product.findOne({
+            productNo: params.productNo
+        })
+        ctx.body = data
+        ctx.status = 200
+        ctx.success = true
+    } catch (e) {
+        ctx.body = e
+        ctx.success = false
+    }
+}
+const EditProduct = async (ctx, next) => {
+    const params = JSON.parse(ctx.request.body)
+    console.log(params)
+    if (!params.Id || !params.AdminToken) {
+        ctx.success = false
+        return
+    }
+    let UpdatedData = {}
+    if (params.productName) {
+        UpdatedData.productName = params.productName
+    }
+    if (params.categoryId) {
+        UpdatedData.categoryId = params.categoryId
+    }
+    if (params.image_url) {
+        UpdatedData.image_url = params.image_url
+    }
+    if (params.content) {
+        UpdatedData.content = params.content
+    }
+    if (params.summary) {
+        UpdatedData.summary = params.summary
+    }
+    if (params.price) {
+        UpdatedData.price = params.price
+    }
+    if (params.stocks) {
+        UpdatedData.stocks = params.stocks
+    }
+    if (params.shopId) {
+        UpdatedData.shopId = params.shopId
+    }
+    if (params.status) {
+        UpdatedData.status = params.status
+    }
+    let editPermission = await permissionValidate(ctx, params.AdminToken, ['root', 'admin'])
+    if (editPermission && !editPermission.msg) {
+        try {
+            let data = await Product.updateOne({
+                productNo: params.Id
+            }, UpdatedData, {
+                upsert: false
+            })
+            ctx.body = data
+            ctx.success = true
+            ctx.status = 200
+        } catch (e) {
+            ctx.body = e
+            ctx.success = false
+        }
+    }
+}
 module.exports = {
     GetAllCategory,
     CreateGoods,
     GetGoodsList,
-    DeleteGoods
+    DeleteGoods,
+    GetProduct,
+    EditProduct
 }

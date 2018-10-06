@@ -185,9 +185,9 @@ export default {
         },
         handleNodeClick (data) {
             console.log(data, 'data')
-            this.$refs.categoryTree.setCheckedKeys([data.id || ''])
-            this.categoryData.defaultCategory.label = `${data.label}  ${data.id || ''}`
-            this.categoryData.defaultCategory.Id = [data.id || '']
+            this.$refs.categoryTree.setCheckedKeys([data.id || 1])
+            this.categoryData.defaultCategory.label = `${data.label}  ${data.id || 1}`
+            this.categoryData.defaultCategory.Id = [data.id || 1]
         },
         updateData (content) {
             this.Form.content = content

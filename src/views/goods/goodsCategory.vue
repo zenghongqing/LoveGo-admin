@@ -28,13 +28,12 @@
                     ]" label="描述" prop="desc" label-width="80px">
                         <el-input v-model="Form.desc"></el-input>
                     </el-form-item>
-                    <el-form-item label="轮播图" prop="avatar" label-width="80px">
-                        <el-upload action="/" list-type="picture-card" ref="uploadImages" :multiple="true"
-                        :limit="3" :file-list="uploadFile.uploadImageList" :autoUpload="false" :on-remove="handleUploadRemove"
-                        :onPreview="handlePictureCardPreview" :onSuccess="handleUploadSuccess" :onExceed="() => {$message.error('商品轮播图不能超过三张')}">
-                            <i class="el-icon-plus"></i>
-                        </el-upload>
-                    </el-form-item>
+                    <el-form-item id="uploadBanner" label="轮播图" label-width="120px">
+                            <el-upload action="/api/uploadfile" list-type="picture-card" ref="uploadImages" :multiple="true" :limit="3"
+                            :file-list="uploadFile.uploadBanner" :on-remove="successUploadBanner" :onSuccess="successUploadBanner" on-onExceed="() => {$message.error('图片不超过五张')}">
+                                <i class="el-icon-plus"></i>
+                            </el-upload>
+                        </el-form-item>
                     <el-form-item>
                         <el-button style="width:100%;" type="primary" @click="editCategory">修改</el-button>
                     </el-form-item>
@@ -55,7 +54,7 @@ export default {
             uploadFile: {
                 dialogImageUrl: '',
                 dialogVisible: false,
-                uploadImageList: []
+                uploadBnner: []
             },
             // 商品分类
             categoryData: {
@@ -68,12 +67,19 @@ export default {
             }
         }
     },
+    mounted () {},
     methods: {
         handleNodeClick () {},
         renderCategoryControl () {},
-        handleUploadRemove () {},
-        handlePictureCardPreview () {},
-        handleUploadSuccess () {},
+        successUploadBanner (response, file, fileList) {
+            let imgArr = []
+            fileList.forEach(function (item) {
+                if (item.response && item.response.filePath) {
+                    imgArr.push({url: item.response.filePath})
+                }
+            })
+            this.uploadFile.uploadBanner = imgArr
+        },
         editCategory () {}
     }
 }

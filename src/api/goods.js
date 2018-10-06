@@ -27,3 +27,17 @@ export function deleteGoods (params) {
         data: params
     })
 }
+export function getProduct (params) {
+    return request({
+        url: '/api/shop/GetProduct',
+        method: 'post',
+        data: params
+    })
+}
+export function editProduct (params) {
+    return request({
+        url: '/api/EditGoods',
+        method: 'post',
+        data: params
+    })
+}

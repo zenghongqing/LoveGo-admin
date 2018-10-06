@@ -2,7 +2,9 @@ import {
     getAllCategory,
     createGoods,
     getGoodsList,
-    deleteGoods
+    deleteGoods,
+    getProduct,
+    editProduct
 } from '@/api/goods'
 
 const goods = {
@@ -48,6 +50,25 @@ const goods = {
         DeleteGoods ({commit, state}, formData) {
             return new Promise((resolve, reject) => {
                 deleteGoods(formData).then(res => {
+                    resolve(res)
+                }).catch(e => {
+                    reject(e)
+                })
+            })
+        },
+        GetProduct ({commit, state}, formData) {
+            return new Promise((resolve, reject) => {
+                getProduct(formData).then(res => {
+                    resolve(res)
+                }).catch(e => {
+                    reject(e)
+                })
+            })
+        },
+        EditGoods ({commit, state}, formData) {
+            return new Promise((resolve, reject) => {
+                editProduct(formData).then(res => {
+                    console.log(res, 'editData')
                     resolve(res)
                 }).catch(e => {
                     reject(e)
