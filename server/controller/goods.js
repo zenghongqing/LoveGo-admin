@@ -51,6 +51,7 @@ const CreateGoods = async (ctx, next) => {
         ctx.body = e
     }
 }
+// 获取商品列表信息
 const GetGoodsList = async (ctx, next) => {
     const params = JSON.parse(ctx.request.body)
     if (!params.pageIndex || params.pageIndex < 0 || !params.pageSize) {
@@ -75,6 +76,7 @@ const GetGoodsList = async (ctx, next) => {
         ctx.success = false
     }
 }
+// 删除商品
 const DeleteGoods = async (ctx, next) => {
     const params = JSON.parse(ctx.request.body)
     if (!params.Id || !params.AdminToken) {
@@ -97,6 +99,7 @@ const DeleteGoods = async (ctx, next) => {
     ctx.success = true
     ctx.status = 200
 }
+// 获取商品信息
 const GetProduct = async (ctx, next) => {
     const params = JSON.parse(ctx.request.body)
     if (!params.productNo) {
@@ -115,6 +118,7 @@ const GetProduct = async (ctx, next) => {
         ctx.success = false
     }
 }
+// 编辑商品
 const EditProduct = async (ctx, next) => {
     const params = JSON.parse(ctx.request.body)
     console.log(params)
@@ -167,11 +171,104 @@ const EditProduct = async (ctx, next) => {
         }
     }
 }
+const CreateCategory = async (ctx, next) => {
+    const params = JSON.parse(ctx.request.body)
+    if (!params.label) {
+        ctx.success = false
+        return
+    }
+    // 删除数据，方便测试
+    // await Category.remove({})
+    // ctx.status = 200
+    // ctx.success = true
+    let formData = {
+        Id: GenerateChallengecode(5),
+        name: params.label,
+        parentId: params.parentId,
+        image_url: params.image_url,
+        desc: params.desc,
+        children: params.children
+    }
+    try {
+        let data = await new Category(formData).save()
+        ctx.body = data
+        ctx.status = 200
+        ctx.success = true
+    } catch (e) {
+        ctx.body = e
+        ctx.success = false
+    }
+}
+const DeleteCategory = async (ctx, next) => {
+    const params = JSON.parse(ctx.request.body)
+    if (!params.Id || !params.AdminToken) {
+        ctx.success = false
+        return
+    }
+    let deleteMsg = await permissionValidate(ctx, params.AdminToken, ['root', 'admin'])
+    if (deleteMsg && !deleteMsg.msg) {
+        try {
+            await Category.deleteOne({
+                Id: params.Id
+            })
+            ctx.success = true
+            ctx.status = 200
+        } catch (e) {
+            ctx.body = e
+            ctx.success = false
+        }
+    } else {
+        ctx.success = false
+    }
+}
+const EditCategory = async (ctx, next) => {
+    const params = JSON.parse(ctx.request.body)
+    if (!params.Id || !params.AdminToken) {
+        ctx.success = false
+        return
+    }
+    let formData = {}
+    if (params.name) {
+        formData.name = params.name
+    }
+    if (params.image_url) {
+        formData.image_url = params.image_url
+    }
+    if (params.parentId) {
+        formData.parentId = params.parentId
+    }
+    if (params.desc) {
+        formData.desc = params.desc
+    }
+    let editMsg = await permissionValidate(ctx, params.AdminToken, ['root', 'admin'])
+    if (editMsg && !editMsg.msg) {
+        try {
+            let data = await Category.updateOne({
+                Id: params.Id
+            }, formData, {
+                upsert: false
+            })
+            ctx.body = data
+            ctx.success = true
+            ctx.status = 200
+        } catch (e) {
+            ctx.body = e
+            ctx.success = false
+        }
+    } else {
+        ctx.success = false
+    }
+    ctx.success = true
+    ctx.status = 200
+}
 module.exports = {
     GetAllCategory,
     CreateGoods,
     GetGoodsList,
     DeleteGoods,
     GetProduct,
-    EditProduct
+    EditProduct,
+    CreateCategory,
+    DeleteCategory,
+    EditCategory
 }

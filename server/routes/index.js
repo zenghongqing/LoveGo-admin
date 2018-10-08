@@ -38,6 +38,9 @@ module.exports = (app) => {
     router.post('/DeleteGoods', goods.DeleteGoods)
     router.post('/shop/GetProduct', goods.GetProduct)
     router.post('/EditGoods', goods.EditProduct)
+    router.post('/CreateCategory', goods.CreateCategory)
+    router.post('/DeleteCategory', goods.DeleteCategory)
+    router.post('/EditCategory', goods.EditCategory)
     // 后台管理用户模块
     router.post('/GetUserList', controller.GetUserList)
     app.use(router.routes()).use(router.allowedMethods())
