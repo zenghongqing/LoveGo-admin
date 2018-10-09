@@ -2,6 +2,7 @@ const Router = require('koa-router')
 const controller = require('../controller')
 const shop = require('../controller/shop')
 const goods = require('../controller/goods')
+const order = require('../controller/order')
 const router = new Router()
 const upload = require('./upload')
 // const checkToken = require('../token/checkToken')
@@ -41,6 +42,9 @@ module.exports = (app) => {
     router.post('/CreateCategory', goods.CreateCategory)
     router.post('/DeleteCategory', goods.DeleteCategory)
     router.post('/EditCategory', goods.EditCategory)
+    // 订单模块
+    router.post('/CreateOrder', order.CreateOrder)
+    router.post('/GetOrderList', order.GetOrderList)
     // 后台管理用户模块
     router.post('/GetUserList', controller.GetUserList)
     app.use(router.routes()).use(router.allowedMethods())

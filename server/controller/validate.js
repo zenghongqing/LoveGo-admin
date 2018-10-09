@@ -25,3 +25,15 @@ exports.GenerateChallengecode = (maxLength) => { // 生成指定位数位随机�
     }
     return Challengecode
 }
+exports.DateRandomFormate = (str) => {
+    if (!str) return
+    let Year = str.getFullYear().toString()
+    let Month = str.getMonth().toString()
+    let Day = str.getDate().toString()
+    let Hours = str.getHours().toString()
+    let Minutes = str.getMinutes().toString()
+    let Seconds = str.getSeconds().toString()
+    let trmap = new Date().getTime().toString()
+    let newDate = Year + Month + Day + Hours + Minutes + Seconds + trmap
+    return newDate
+}

@@ -9,7 +9,9 @@ const getters = {
     /* 店铺模块 */
     shopData: state => state.shop.shopData,
     /* 商品模块 */
-    goodsListData: state => state.goods.goodsListData
+    goodsListData: state => state.goods.goodsListData,
+    /* 订单模块 */
+    orderListData: state => state.order.orderListData
 }
 
 export default getters
