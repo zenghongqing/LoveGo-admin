@@ -44,7 +44,6 @@ export default {
         BreadCrumbComponent
     },
     created () {
-        console.log(this.userData, 'userData')
     },
     methods: {
         logout () {

@@ -4,7 +4,7 @@
     </div>
 </template>
 <script>
-// import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import Echarts from 'echarts'
 export default {
     name: 'dashboard',
@@ -13,17 +13,22 @@ export default {
             staticsData: {}
         }
     },
+    computed: {
+        ...mapGetters([
+            'userData'
+        ])
+    },
     mounted () {
         this.initData()
     },
     methods: {
-        initData () {
+        initEcharts () {
             let myEchart = Echarts.init(this.$refs.mainRef)
             // 绘制图表
             myEchart.setOption({
                 title: {
                     text: '月流量统计',
-                    subtext: '访问总数: 0  接口调用总数: 0'
+                    subtext: `访问总数: ${this.staticsData.VisitsDailyTotalCount}  接口调用总数: ${this.staticsData.ApiDailyTotalCount || 0}`
                 },
                 tooltip: {
                     trigger: 'axis',
@@ -51,7 +56,7 @@ export default {
                 xAxis: {
                     type: 'category',
                     boundaryGap: false,
-                    data: 500
+                    data: this.staticsData.MonthTotalData
                 },
                 yAxis: {
                     type: 'value'
@@ -61,44 +66,58 @@ export default {
                     type: 'line',
                     stack: '总量',
                     areaStyle: {normal: {}},
-                    data: '1111'
+                    data: this.staticsData.UserDailyData
                 },
                 {
                     name: '新增管理员',
                     type: 'line',
                     stack: '总量',
                     areaStyle: {normal: {}},
-                    data: 'eefe'
+                    data: this.staticsData.AdminDailyData
                 },
                 {
                     name: '新增店铺',
                     type: 'line',
                     stack: '总量',
                     areaStyle: {normal: {}},
-                    data: ''
+                    data: this.staticsData.ShopDailyData
                 },
                 {
                     name: '新增订单',
                     type: 'line',
                     stack: '总量',
                     areaStyle: {normal: {}},
-                    data: ''
+                    data: this.staticsData.OrderDailyData
                 },
                 {
                     name: '用户访问量',
                     type: 'line',
                     stack: '总量',
                     areaStyle: {normal: {}},
-                    data: ''
+                    data: this.staticsData.VisitsDailyData || 0
                 },
                 {
                     name: '接口调用次数',
                     type: 'line',
                     stack: '总量',
                     areaStyle: {normal: {}},
-                    data: ''
+                    data: this.staticsData.ApiDailyData || 0
                 }]
             })
+        },
+        async initData () {
+            let res = await this.$store.dispatch('GetStatisData')
+            console.log(res.data)
+            this.staticsData = res.data
+            this.staticsData.VisitsDailyTotalCount = 0
+            this.staticsData.ApiDailyTotalCount = 0
+            this.staticsData.VisitsDailyData.map(item => {
+                this.staticsData.VisitsDailyTotalCount += item
+            })
+            this.staticsData.ApiDailyData.map(item => {
+                this.staticsData.ApiDailyTotalCount += item
+            })
+            this.initEcharts()
         }
     }
 }

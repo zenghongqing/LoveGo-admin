@@ -1,6 +1,6 @@
 const Shop = require('../models/shop')
 const ShopInfo = Shop.Shop // 店铺信息
-const { GenerateChallengecode, permissionValidate } = require('./validate')
+const { GenerateChallengecode, permissionValidate, StatisNewShop } = require('./validate')
 const CreateShop = async (ctx, next) => {
     const params = JSON.parse(ctx.request.body)
     if (!params.shop_name || !params.shop_logo || !params.cms_banner || !params.shop_summary) {
@@ -34,6 +34,7 @@ const CreateShop = async (ctx, next) => {
     }
     try {
         let data = await new ShopInfo(shopData).save()
+        await StatisNewShop()
         ctx.body = data
         ctx.status = 200
         ctx.success = true

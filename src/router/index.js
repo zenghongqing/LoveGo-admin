@@ -10,6 +10,11 @@ const constantRouterMap = [
         component: _import('login/index'),
         hidden: true
     },
+    {// 接口测试
+        path: '/member',
+        component: _import('member/index'),
+        hidden: true
+    },
     {// 404页面
         path: '/404',
         component: _import('404'),

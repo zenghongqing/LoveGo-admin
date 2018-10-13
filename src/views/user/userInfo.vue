@@ -6,11 +6,11 @@
                 label="用户头像"
                 width="100">
                 <template slot-scope="scope">
-                    <img style="width:80px;height:80px;" src=""/>
+                    <img style="width:80px;height:80px;" :src="scope.row.photoUrl"/>
                 </template>
             </el-table-column>
             <el-table-column
-                prop="name"
+                prop="username"
                 label="用户名"
                 width="100">
             </el-table-column>
@@ -61,6 +61,13 @@ export default {
         initData () {
             this.$store.dispatch('GetUserList', this.dataParams).then(res => {
                 console.log(res, 'response')
+                let datas = res.data
+                datas.forEach(item => {
+                    if (!item.sex) {
+                        item.sex = '无'
+                    }
+                })
+                this.tableData = datas
             })
         }
     }

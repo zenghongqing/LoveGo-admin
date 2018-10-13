@@ -3,6 +3,9 @@ const controller = require('../controller')
 const shop = require('../controller/shop')
 const goods = require('../controller/goods')
 const order = require('../controller/order')
+const member = require('../controller/member')
+const statis = require('../controller/statis')
+const { StatisNewApi } = require('../controller/validate')
 const router = new Router()
 const upload = require('./upload')
 // const checkToken = require('../token/checkToken')
@@ -13,6 +16,18 @@ module.exports = (app) => {
         await ctx.render('index', {
             title: 'LoveGo'
         })
+    })
+    // 统计接口数目
+    router.all('/*', async (ctx, next) => {
+        // 统计接口数目
+        await StatisNewApi()
+        if (ctx.method === 'OPTIONS') {
+            ctx.success = true
+            ctx.status = 200
+        } else {
+            console.log('下一路由')
+            await next()
+        }
     })
     router.post('/CreateUser', controller.CreateUser)
     router.post('/uploadfile', upload.single('file'), controller.UploadFile)
@@ -45,7 +60,12 @@ module.exports = (app) => {
     // 订单模块
     router.post('/CreateOrder', order.CreateOrder)
     router.post('/GetOrderList', order.GetOrderList)
+    router.post('/GetOrder', order.GetOrder)
+    // 用户模块
+    router.post('/Register', member.Register)
+    // 统计模块
+    router.post('/GetStatisData', statis.GetStatisData)
     // 后台管理用户模块
-    router.post('/GetUserList', controller.GetUserList)
+    router.post('/GetUserList', member.GetUserList)
     app.use(router.routes()).use(router.allowedMethods())
 }

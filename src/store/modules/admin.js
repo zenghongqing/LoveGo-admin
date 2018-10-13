@@ -1,5 +1,5 @@
 import { setToken, removeToken } from '@/utils/auth'
-import { createUser, getAdminList, authorizedAdmin, deleteAdmin, getAdminInfo, editAdminInfo } from '@/api/admin'
+import { createUser, getAdminList, authorizedAdmin, deleteAdmin, getAdminInfo, editAdminInfo, getStatisData } from '@/api/admin'
 import { login, getInfo } from '@/api/login'
 const admin = {
     state: {
@@ -37,6 +37,8 @@ const admin = {
                 getInfo(token).then(res => {
                     commit('SET_USER_DATA', res.data)
                     resolve(res.data)
+                }).catch(e => {
+                    reject(e)
                 })
             })
         },
@@ -99,9 +101,7 @@ const admin = {
         AdminInfo ({commit, state}, formData) {
             return new Promise((resolve, reject) => {
                 getAdminInfo(formData).then(res => {
-                    if (res) {
-                        resolve(res)
-                    }
+                    resolve(res)
                 }).catch(e => {
                     reject(e)
                 })
@@ -111,7 +111,6 @@ const admin = {
         DeleteAdmin ({commit, state}, formData) {
             return new Promise((resolve, reject) => {
                 deleteAdmin(formData).then(res => {
-                    console.log(res)
                     resolve()
                 }).catch(e => {
                     reject(e)
@@ -120,7 +119,13 @@ const admin = {
         },
         // 统计信息
         GetStatisData ({commit, state}, formData) {
-            return new Promise((resolve, reject) => {})
+            return new Promise((resolve, reject) => {
+                getStatisData().then(res => {
+                    resolve(res)
+                }).catch(e => {
+                    reject(e)
+                })
+            })
         }
     }
 }

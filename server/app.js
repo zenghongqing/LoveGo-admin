@@ -21,6 +21,7 @@ app.use(serve(
 app.use(views(path.join(__dirname, './views'), {
     extension: 'ejs'
 }))
+
 // 路由配置
 routes(app)
 // app.use(session({

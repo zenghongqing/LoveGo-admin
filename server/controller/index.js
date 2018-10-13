@@ -2,7 +2,7 @@ const Sys = require('../models/admin')
 const Admin = Sys.Admin
 // const path = require('path')
 const md5 = require('md5')
-const { permissionValidate } = require('./validate')
+const { permissionValidate, StatisNewAdmin } = require('./validate')
 // const qs = require('qs')
 // 保存管理员信息
 const CreateUser = async (ctx, next) => {
@@ -23,13 +23,16 @@ const CreateUser = async (ctx, next) => {
         status: 9,
         photo_url: params.photo_url
     }
-    new Admin(newAdmin).save().then(response => {
-        console.log(response, '保存管理员信息成功')
-    }, err => {
-        console.error(err)
-    })
-    ctx.status = 200
-    ctx.success = true
+    try {
+        let data = await new Admin(newAdmin).save()
+        await StatisNewAdmin()
+        ctx.body = data
+        ctx.status = 200
+        ctx.success = true
+    } catch (e) {
+        ctx.body = e
+        ctx.success = false
+    }
 }
 // 上传头像
 const UploadFile = async (ctx, next) => {
@@ -71,25 +74,19 @@ const LoginUser = async (ctx, next) => {
 // 获取管理员信息
 const GetAdminInfo = async (ctx, next) => {
     let adminToken = JSON.parse(ctx.request.body).AdminToken
-    let info = await Admin.findOne({_id: adminToken}, {
-        __v: 0,
-        password: 0
-    })
-    ctx.body = info
-    ctx.status = 200
-    ctx.success = true
-}
-// 获取用户信息列表
-const GetUserList = async (ctx, next) => {
-    const params = JSON.parse(ctx.request.body)
-    if (!params.pageIndex || params.pageIndex <= 0 || !params.pageSize) {
-        return console.error('页码不对')
+    try {
+        let info = await Admin.findOne({_id: adminToken}, {
+            __v: 0,
+            password: 0
+        })
+        ctx.body = info
+        ctx.status = 200
+        ctx.success = true
+        next()
+    } catch (e) {
+        ctx.body = e
+        ctx.success = false
     }
-    let querySkip = (parseInt(params.pageIndex) - 1) * parseInt(params.pageSize)
-    let queryLimit = parseInt(params.pageSize)
-    console.log(querySkip, queryLimit)
-    ctx.status = 200
-    ctx.success = true
 }
 // 获取管理员列表
 const GetAdminList = async (ctx, next) => {
@@ -224,7 +221,6 @@ module.exports = {
     UploadFile,
     LoginUser,
     GetAdminInfo,
-    GetUserList,
     GetAdminList,
     AuthorizedAdmin,
     DeleteAdmin,

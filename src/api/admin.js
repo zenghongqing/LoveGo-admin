@@ -41,3 +41,10 @@ export function editAdminInfo (params) {
         data: params
     })
 }
+export function getStatisData () {
+    return request({
+        url: '/api/GetStatisData',
+        method: 'post',
+        data: {}
+    })
+}

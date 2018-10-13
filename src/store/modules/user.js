@@ -13,7 +13,9 @@ const admin = {
         GetUserList ({ commit, state }, formData) {
             return new Promise((resolve, reject) => {
                 getUserList(formData).then(res => {
-                    console.log(res, 'resssss')
+                    resolve(res.data)
+                }).catch(e => {
+                    reject(e)
                 })
             })
         }

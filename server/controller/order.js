@@ -2,11 +2,10 @@ const OrderObj = require('../models/order')
 const Package = OrderObj.Package
 const Order = OrderObj.Order
 const Comment = OrderObj.Comment
-const { DateRandomFormate } = require('./validate')
+const { DateRandomFormate, StatisNewOrder } = require('./validate')
 console.log(Package, Order, Comment)
 const CreateOrder = async (ctx, next) => {
     const params = ctx.request.body
-    console.log(params)
     const formData = {
         orderInfo: {
             orderNo: DateRandomFormate(new Date()),
@@ -35,6 +34,7 @@ const CreateOrder = async (ctx, next) => {
 
     }
     let data = await new Order(formData).save()
+    await StatisNewOrder()
     ctx.body = data
     // await Order.remove({})
     ctx.success = true
@@ -65,7 +65,33 @@ const GetOrderList = async (ctx, next) => {
         ctx.success = false
     }
 }
+const GetOrder = async (ctx, next) => {
+    const params = JSON.parse(ctx.request.body)
+    console.log(params)
+    if (!params.OrderNo) {
+        ctx.body = {
+            msg: '订单号有误'
+        }
+        ctx.success = false
+        return
+    }
+    try {
+        let orderInfo = await Order.findOne({'orderInfo.orderNo': params.OrderNo}, {
+            __v: 0,
+            _id: 0
+        })
+        ctx.body = orderInfo
+        ctx.success = true
+        ctx.status = 200
+    } catch (e) {
+        ctx.body = {
+            msg: e
+        }
+        ctx.success = false
+    }
+}
 module.exports = {
     CreateOrder,
-    GetOrderList
+    GetOrderList,
+    GetOrder
 }
