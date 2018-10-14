@@ -14,7 +14,13 @@ const sysUserInfo = new Schema({// 管理员信息
     address: {type: String},
     status: {type: Number, default: 9} // 审核状态
 }, { collection: 'sysUserInfo' })
+// 当没有传入collection参数时，
+// Mongoose会通过model name（就是第一个参数），
+// 调用utils.toCollectionName方法产生一个collection name，
+// 而这个方法会使name变成复数形式。如果你不想要这个过程，
+// 只要传入collection name参数或设置Schema中的collection name选项。
 
+// 通过index方法添加索引，如给create_date和status字段添加索引, 1和-1分别表示升序索引和降序索引
 sysUserInfo.index({
     create_date: 1,
     status: 1
