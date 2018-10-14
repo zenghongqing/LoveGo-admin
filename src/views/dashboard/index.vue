@@ -106,7 +106,9 @@ export default {
             })
         },
         async initData () {
-            let res = await this.$store.dispatch('GetStatisData')
+            let res = await this.$store.dispatch('GetStatisData').catch(e => {
+                console.log('获取统计数据失败' + e)
+            })
             console.log(res.data)
             this.staticsData = res.data
             this.staticsData.VisitsDailyTotalCount = 0

@@ -1,11 +1,11 @@
 const { Admin } = require('../models/admin')
 const Sms = require('../models/sms')
+const smsClient = require('../SMS/sms-sdk')
 const {
     StatisUser,
     StatisOrder,
     StatisShop,
     StatisAdmin,
-    StatisVisits,
     StatisApi
 } = require('../models/statics')
 const ChallengeCode = Sms.SMSChallengeCode
@@ -74,17 +74,28 @@ exports.SendPhoneMessage = (phone) => {
         Status: 1
     })
     return new Promise((resolve, reject) => {
-        newChallengeCode.save().then(res => {
-            if (!res) {
-                let err = '保存失败'
-                return reject(err)
+        smsClient.sendSMS({
+            PhoneNumbers: phone,
+            SignName: '阿威',
+            TemplateCode: 'SMS_117520206',
+            TemplateParam: JSON.stringify({code: GenerateChallengecode})
+        }).then(data => {
+            let { code } = data
+            console.log(data)
+            if (code === 'OK') {
+                newChallengeCode.save().then(res => {
+                    if (!res) {
+                        let err = '保存失败'
+                        return reject(err)
+                    }
+                    setTimeout(() => {
+                        ChallengeCode.updateOne({phone: phone, challengecode: GenerateChallengecode}, {Status: 9}, (err, success) => { console.log(err, success) })
+                    }, 300000)
+                    resolve(res)
+                }, err => {
+                    reject(err)
+                })
             }
-            setTimeout(() => {
-                ChallengeCode.updateOne({phone: phone, challengecode: GenerateChallengecode}, {Status: 9}, (err, success) => { console.log(err, success) })
-            }, 300000)
-            resolve(res)
-        }, err => {
-            reject(err)
         })
     })
 }

@@ -121,7 +121,6 @@ export default {
                     })
                 }
             })
-            console.log(List, categoryData, '***')
             List.map((item, index, array) => {
                 categoryData.map((children1, index, array) => {
                     if (children1.parentId === item.Id) {
@@ -151,7 +150,6 @@ export default {
                 })
             })
             this.categoryData.categoryTree = List
-            console.log(categoryData)
         },
         handleNodeClick (data) {
             this.Form.id = data.Id

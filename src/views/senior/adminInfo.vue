@@ -126,6 +126,7 @@ export default {
                 }).catch(e => {
                     this.fullscreenLoading = false
                     console.log(e)
+                    this.$message.error('审核失败' + e.msg)
                 })
             })
         },
@@ -146,6 +147,7 @@ export default {
                     this.updateData()
                 }).catch(e => {
                     console.log(e)
+                    this.$message.error('删除失败' + e.msg)
                     this.fullscreenLoading = false
                 })
             })

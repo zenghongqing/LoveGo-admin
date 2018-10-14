@@ -43,6 +43,7 @@
     </div>
 </template>
 <script>
+import { parseTime } from '@/utils'
 export default {
     data () {
         return {
@@ -60,12 +61,12 @@ export default {
     methods: {
         initData () {
             this.$store.dispatch('GetUserList', this.dataParams).then(res => {
-                console.log(res, 'response')
                 let datas = res.data
                 datas.forEach(item => {
                     if (!item.sex) {
                         item.sex = '无'
                     }
+                    item.createTime = parseTime(item.createTime, '{y}-{m}-{d}')
                 })
                 this.tableData = datas
             })

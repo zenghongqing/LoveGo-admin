@@ -28,6 +28,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getToken } from '@/utils/auth'
+import { parseTime } from '@/utils'
 export default {
     data () {
         return {
@@ -65,7 +66,7 @@ export default {
                         like_count: i.like_count,
                         shop_name: i.shop_name,
                         shop_score: parseFloat((i.shop_score.service + i.shop_score.ship) / 3),
-                        shop_create_date: i.shop_create_date
+                        shop_create_date: parseTime(i.shop_create_date, '{y}-{m}-{d}')
                     })
                 })
             }

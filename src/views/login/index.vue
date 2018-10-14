@@ -72,7 +72,8 @@ export default {
                         this.loading = false
                         console.log('跳转')
                         this.$router.push({path: '/'})
-                    }).catch(() => {
+                    }).catch((e) => {
+                        this.$message.error(e)
                         this.loading = false
                     })
                 } else {

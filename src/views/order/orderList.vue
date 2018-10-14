@@ -23,6 +23,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import { parseTime } from '@/utils'
 // import request from '@/utils/service'
 export default {
     data () {
@@ -97,7 +98,7 @@ export default {
                     Id: item.id,
                     orderNo: item.orderInfo.orderNo,
                     total_fee: item.orderInfo.total_fee || 0,
-                    createTime: item.orderInfo.createTime,
+                    createTime: parseTime(item.orderInfo.createTime, '{y}-{m}-{d}'),
                     cancel_status: item.orderInfo.cancel_status,
                     confirm_status: item.orderInfo.confirm_status,
                     finish_status: item.orderInfo.finish_status,

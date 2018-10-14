@@ -30,7 +30,6 @@ const CreateGoods = async (ctx, next) => {
         return
     }
     try {
-        console.log(params)
         const goodsInfo = {
             productName: params.productName,
             categoryId: params.categoryId,

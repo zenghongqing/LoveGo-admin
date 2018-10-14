@@ -1,10 +1,9 @@
 const MemberModel = require('../models/member')
 const Member = MemberModel.Member
-const Address = MemberModel.Address
+// const Address = MemberModel.Address
 const { CheckChallengeCode, GenerateChallengecode, StatisNewUser } = require('./validate')
 const Sms = require('../models/sms')
 const ChallengeCode = Sms.SMSChallengeCode
-console.log(Member, Address)
 const Register = async (ctx, next) => {
     const params = JSON.parse(ctx.request.body)
     if (!params.username || !params.password) {

@@ -1,4 +1,4 @@
-import router from './router'
+../src/permission.jsimport router from './router'
 import store from './store'
 import NProgress from 'nprogress' // Progress 进度条
 import 'nprogress/nprogress.css' // Progress 进度条样式
@@ -17,6 +17,12 @@ router.beforeEach((to, from, next) => {
                 const Token = getToken()
                 store.dispatch('GetInfo', Token).then(res => {
                     next()
+                }).catch(() => {
+                    store.dispatch('LogOut').then(() => {
+                        let err = '验证失败,请重新登录'
+                        this.$message.error(err)
+                        next({ path: '/login' })
+                    })
                 })
             } else {
                 console.log(store.getters.userData.roles, 'roles')

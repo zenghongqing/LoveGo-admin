@@ -169,6 +169,7 @@ export default {
                 }, 1500)
             }, error => {
                 console.log(error, 'error')
+                this.$message.error('创建失败')
                 this.fullscreenLoading = false
             })
         }

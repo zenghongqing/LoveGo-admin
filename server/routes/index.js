@@ -5,7 +5,7 @@ const goods = require('../controller/goods')
 const order = require('../controller/order')
 const member = require('../controller/member')
 const statis = require('../controller/statis')
-const { StatisNewApi } = require('../controller/validate')
+const { StatisNewApi, SendPhoneMessage } = require('../controller/validate')
 const router = new Router()
 const upload = require('./upload')
 // const checkToken = require('../token/checkToken')
@@ -65,6 +65,18 @@ module.exports = (app) => {
     router.post('/Register', member.Register)
     // 统计模块
     router.post('/GetStatisData', statis.GetStatisData)
+    // 短信验证
+    router.post('/SendPhoneMessage', async (ctx, next) => {
+        const params = JSON.parse(ctx.request.body)
+        try {
+            await SendPhoneMessage(params.phone)
+            ctx.success = true
+            ctx.status = 200
+        } catch (e) {
+            ctx.body = e
+            ctx.success = false
+        }
+    })
     // 后台管理用户模块
     router.post('/GetUserList', member.GetUserList)
     app.use(router.routes()).use(router.allowedMethods())
