@@ -20,6 +20,7 @@ const admin = {
         Login ({commit}, userInfo) {
             return new Promise((resolve, reject) => {
                 login(userInfo.username.trim(), userInfo.password).then(res => {
+                    console.log(res, 'login')
                     if (res && res.msg) {
                         reject(res.msg)
                     } else {
@@ -27,6 +28,7 @@ const admin = {
                         resolve()
                     }
                 }, err => {
+                    console.log(err, 'eee')
                     reject(err)
                 })
             })
@@ -64,10 +66,8 @@ const admin = {
         AdminList ({commit, state}, formData) {
             return new Promise((resolve, reject) => {
                 getAdminList(formData).then(res => {
-                    if (res) {
-                        commit('SET_ADMIN_DATA', res)
-                        resolve(res)
-                    }
+                    commit('SET_ADMIN_DATA', res)
+                    resolve(res)
                 }).catch(e => {
                     reject(e)
                 })
@@ -77,9 +77,7 @@ const admin = {
         EditAdminInfo ({commit, state}, formData) {
             return new Promise((resolve, reject) => {
                 editAdminInfo(formData).then(res => {
-                    if (res) {
-                        resolve(res)
-                    }
+                    resolve(res)
                 }).catch(e => {
                     reject(e)
                 })

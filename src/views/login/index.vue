@@ -77,8 +77,8 @@ export default {
                         this.loading = false
                     })
                 } else {
-                    console.log('error submit')
-                    return false
+                    let e = '请输入完整信息'
+                    this.$message.error(e)
                 }
             })
         }

@@ -46,7 +46,7 @@ const UploadFile = async (ctx, next) => {
 const LoginUser = async (ctx, next) => {
     let params = JSON.parse(ctx.request.body)
     if (!params.username || !params.password) {
-        return console.error('未填用户信息')
+        return ctx.throw(400, '未填用户信息')
     }
     try {
         let data = await Admin.findOne({
@@ -90,16 +90,12 @@ const GetAdminList = async (ctx, next) => {
             password: 0
         })
         if (!adminList) {
-            ctx.body = {
-                msg: '用户信息不存在'
-            }
+            return ctx.throw(404, '用户信息不存在')
         } else {
             ctx.body = adminList
         }
     } else {
-        ctx.body = {
-            msg: adminInfo.message
-        }
+        return ctx.throw(405, adminInfo.message)
     }
     ctx.success = true
     ctx.status = 200
@@ -120,6 +116,7 @@ const AuthorizedAdmin = async (ctx, next) => {
             ctx.body = {
                 msg: '用户信息不存在'
             }
+            return ctx.throw(405, '用户信息不存在')
         } else {
             ctx.body = adminInfo
         }
@@ -127,6 +124,7 @@ const AuthorizedAdmin = async (ctx, next) => {
         ctx.body = {
             msg: adminInfo.message
         }
+        return ctx.throw(405, '用户信息不存在')
     }
     ctx.status = 200
     ctx.success = true
@@ -146,7 +144,7 @@ const DeleteAdmin = async (ctx, next) => {
             // ctx.body = {
             //     msg: '用户信息不存在'
             // }
-            return ctx.throw(404, {msg: '用户信息不存在'})
+            return ctx.throw(404, '用户信息不存在')
         } else {
             ctx.body = adminList
         }
@@ -195,17 +193,15 @@ const EditAdmin = async (ctx, next) => {
             upsert: false
         })
         if (!editInfo) {
-            ctx.body = {
-                msg: '用户信息不存在'
-            }
+            // ctx.body = {
+            //     msg: '用户信息不存在'
+            // }
+            return ctx.throw(404, '用户信息不存在')
         } else {
             ctx.body = editInfo
         }
     } else {
-        ctx.body = {
-            msg: '用户信息不存在'
-        }
-        ctx.success = false
+        return ctx.throw(404, '用户信息不存在')
     }
     ctx.status = 200
     ctx.success = true
