@@ -5,6 +5,8 @@ const goods = require('../controller/goods')
 const order = require('../controller/order')
 const member = require('../controller/member')
 const statis = require('../controller/statis')
+const Sms = require('../models/sms')
+const ChallengeCode = Sms.SMSChallengeCode
 const { StatisNewApi, SendPhoneMessage } = require('../controller/validate')
 const router = new Router()
 const upload = require('./upload')
@@ -70,6 +72,10 @@ module.exports = (app) => {
     router.post('/SendPhoneMessage', async (ctx, next) => {
         const params = JSON.parse(ctx.request.body)
         try {
+            let phoneData = await ChallengeCode.findOne({phone: params.phone})
+            if (phoneData && phoneData.status === 9) {
+                return ctx.throw(405, '验证码已过期')
+            }
             await SendPhoneMessage(params.phone)
             ctx.success = true
             ctx.status = 200
