@@ -63,6 +63,7 @@ module.exports = (app) => {
     router.post('/GetOrder', order.GetOrder)
     // 用户模块
     router.post('/Register', member.Register)
+    router.post('/Login', member.Login)
     // 统计模块
     router.post('/GetStatisData', statis.GetStatisData)
     // 短信验证

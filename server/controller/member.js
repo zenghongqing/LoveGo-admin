@@ -1,7 +1,8 @@
 const MemberModel = require('../models/member')
 const Member = MemberModel.Member
+const md5 = require('md5')
 // const Address = MemberModel.Address
-const { CheckChallengeCode, GenerateChallengecode, StatisNewUser } = require('./validate')
+const { CheckChallengeCode, GenerateChallengecode, StatisNewUser, StatisNewVisits } = require('./validate')
 const Sms = require('../models/sms')
 const ChallengeCode = Sms.SMSChallengeCode
 const Register = async (ctx, next) => {
@@ -13,18 +14,15 @@ const Register = async (ctx, next) => {
     try {
         await CheckChallengeCode(params.phone, params.challengecode)
         let mem = await Member.findOne({username: params.username})
-        console.log(mem, 111, 'mem')
         if (mem) {
-            ctx.body = {
-                msg: '该账户已存在'
-            }
-            ctx.status = 200
-            ctx.success = true
-            return
+            // ctx.body = {
+            //     msg: '该账户已存在'
+            // }
+            return ctx.throw(204, '该账户已存在')
         }
         let newMemberInfo = new Member({
             username: params.username,
-            password: params.password,
+            password: md5(params.password),
             validWalletAmount: 200000,
             Sex: params.Sex ? params.Sex : null,
             phone: params.phone,
@@ -69,7 +67,35 @@ const GetUserList = async (ctx, next) => {
         ctx.success = false
     }
 }
+// 用户登录
+const Login = async (ctx, next) => {
+    const params = JSON.parse(ctx.request.body)
+    if (!params.username || !params.password) {
+        return ctx.throw(404, '登录信息不完整')
+    }
+    try {
+        // 获取用户标识
+        let memberInfo = await Member.findOne({username: params.username})
+        if (!memberInfo) {
+            ctx.success = false
+            return
+        }
+        let userInfo = await Member.findById(memberInfo._id)
+        if (userInfo.username === params.username && userInfo.password === md5(params.password)) {
+            ctx.body = memberInfo.data
+            ctx.success = true
+            ctx.status = 200
+            await StatisNewVisits()
+        } else {
+            return ctx.throw(404, '账号密码错误')
+        }
+    } catch (e) {
+        ctx.body = e
+        ctx.success = false
+    }
+}
 module.exports = {
     Register,
-    GetUserList
+    GetUserList,
+    Login
 }

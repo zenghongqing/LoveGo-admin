@@ -6,7 +6,8 @@ const {
     StatisOrder,
     StatisShop,
     StatisAdmin,
-    StatisApi
+    StatisApi,
+    StatisVisits
 } = require('../models/statics')
 const ChallengeCode = Sms.SMSChallengeCode
 exports.permissionValidate = (ctx, AdminToken, permissionList) => {
@@ -144,8 +145,8 @@ exports.StatisNewAdmin = async () => {
     await new StatisAdmin({}).save()
 }
 // 统计访问量
-exports.StatisNewVisits = () => {
-
+exports.StatisNewVisits = async () => {
+    await new StatisVisits({}).save()
 }
 // 统计接口调用次数
 exports.StatisNewApi = async () => {
