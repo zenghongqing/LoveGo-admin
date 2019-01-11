@@ -227,5 +227,6 @@ const constantRouterMap = [
     }
 ]
 export default new Router({
+    mode: 'history',
     routes: constantRouterMap
 })

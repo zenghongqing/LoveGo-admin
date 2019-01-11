@@ -161,13 +161,14 @@ export default {
             this.categoryData.defaultCategory.Id = [data.id]
         },
         renderCategoryControl (h, {node, data, store}) {
-            return (<span style="flex:1;display: flex;align-items:center;justify-content:space-between;font-size:14px;padding-right:8px;">
-                <span>{node.label}</span>
-                <span>
-                    <el-button style="font-size: 12px;" type="text" on-click={ () => this.addCategoryTree(data) }>添加</el-button>
-                    { data.parentId !== 0 ? <el-button style="font-size: 12px;" type="text" on-click={ () => this.removeCategoryTree(data) }>删除</el-button> : '' }
-                </span>
-            </span>)
+            return (`<span style="flex:1;display: flex;align-items:center;justify-content:space-between;font-size:14px;padding-right:8px;">
+                    <span>{node.label}</span>
+                    <span>
+                        <el-button style="font-size: 12px;" type="text" on-click={ () => this.addCategoryTree(data) }>添加</el-button>
+                        { data.parentId !== 0 ? <el-button style="font-size: 12px;" type="text" on-click={ () => this.removeCategoryTree(data) }>删除</el-button> : '' }
+                    </span>
+                </span>`
+            )
         },
         addCategoryTree (data) {
             this.$confirm(`确认再${data.label} 节点下添加一个新节点吗？`, '提示', {

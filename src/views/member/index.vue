@@ -6,6 +6,10 @@
             <input type="tel" v-model="code" placeholder="请输入验证码" name="registerdcode">
             <div class="registerd-getcode" @click="getPhoneCheckCode">获取验证码</div>
         </div>
+        <hr>
+        <div class="pay">
+            <button @click="pay">支付</button>
+        </div>
         <button>注册</button>
     </div>
 </template>
@@ -25,6 +29,7 @@ export default {
         //         this.$message.success(res.data.msg)
         //     }
         // })
+        // this.pay()
     },
     methods: {
         // 注册
@@ -57,6 +62,20 @@ export default {
             } else {
                 this.$message.error('请填写正确的手机号码')
             }
+        },
+        // 支付宝当面付
+        async pay () {
+            const result = await request({
+                url: '/api/alipay',
+                method: 'post',
+                data: {
+                    subject: '辣条',
+                    out_trade_no: '1232423',
+                    total_amount: '1'
+                }
+            })
+            console.log(decodeURIComponent(result.data), 'result')
+            // window.location.href = result.data
         }
     }
 }

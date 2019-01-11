@@ -6,6 +6,7 @@ const order = require('../controller/order')
 const member = require('../controller/member')
 const statis = require('../controller/statis')
 const Sms = require('../models/sms')
+const Pay = require('../controller/pay')
 const ChallengeCode = Sms.SMSChallengeCode
 const { StatisNewApi, SendPhoneMessage } = require('../controller/validate')
 const router = new Router()
@@ -14,7 +15,7 @@ const upload = require('./upload')
 // 启动数据库
 module.exports = (app) => {
     // 服务端首页
-    router.get('/', async (ctx) => {
+    router.get('/api', async (ctx) => {
         await ctx.render('index', {
             title: 'LoveGo'
         })
@@ -84,6 +85,8 @@ module.exports = (app) => {
             ctx.success = false
         }
     })
+    // 支付宝支付
+    router.post('/alipay', Pay.payMoney)
     // 后台管理用户模块
     router.post('/GetUserList', member.GetUserList)
     app.use(router.routes()).use(router.allowedMethods())

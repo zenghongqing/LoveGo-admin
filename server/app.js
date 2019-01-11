@@ -5,6 +5,7 @@ const serve = require('koa-static')
 const path = require('path')
 const body = require('koa-body')
 const views = require('koa-views')
+const historyApiFallback = require('koa2-connect-history-api-fallback')
 // const bodyParser = require('koa-bodyparser')
 
 // const session = require('koa-session-store')
@@ -12,6 +13,7 @@ const views = require('koa-views')
 const { port } = require('./config')
 require('./db')
 // app.use(bodyParser())
+app.use(historyApiFallback({whileList: ['/api']}))
 app.use(body())
 // 设置静态目录
 app.use(serve(
