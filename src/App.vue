@@ -6,6 +6,9 @@
 
 <script>
 export default {
-    name: 'App'
+    name: 'App',
+    created () {
+        throw new TypeError('sentry webpack upload Error')
+    }
 }
 </script>

@@ -12,6 +12,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const { DllReferencePlugin } = require('webpack')
+const webpackSentryPlugin = require('webpack-sentry-plugin')
 const webpackConfig = merge(baseWebpackConfig, {
   	mode: 'production',
   	devtool: config.build.productionSourceMap ? config.build.devtool : false,
@@ -28,7 +29,8 @@ const webpackConfig = merge(baseWebpackConfig, {
 			// 优化压缩css
 			new OptimizeCSSAssetsPlugin(),
 		  	new UglifyJsPlugin({
-			  	parallel: 4
+				  parallel: 4,
+				  sourceMap: true
 			  	// output: {
 				//   	comments: false
 				// }
@@ -66,7 +68,7 @@ const webpackConfig = merge(baseWebpackConfig, {
 		// 告诉 Webpack 使用了哪些动态链接库
 		new DllReferencePlugin({
 			context: __dirname, // 上下文环境路径
-			// 描述 react 动态链接库的文件内容
+			// 描述 vue 动态链接库的文件内容
 			manifest: require('./dll/vue.dll.manifest.json')
 		}),
 		// extract css into its own file
@@ -109,8 +111,18 @@ const webpackConfig = merge(baseWebpackConfig, {
 				from: path.resolve(__dirname, '../static'),
 				to: config.build.assetsSubDirectory,
 				ignore: ['.*']
-		}
-		])
+			}
+		]),
+		new webpackSentryPlugin({
+			organization: 'lx-kp',
+			project: 'lovego',
+			release: 'pro@1.0.1',
+			apiKey: '04cb47d762174c6da910e4d2f90955617a28bd469be948b3800c9e043db9e168',
+			include: /\.js$/,
+			deleteAfterCompile: true,
+        	suppressErrors: true,
+			urlPrefix: '~/static/js'
+		})
   	]
 })
 

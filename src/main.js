@@ -12,6 +12,17 @@ import store from './store'
 import './permission'
 import '@/icons' // 导入svg-icon组件
 import '@/assets/styles/index.scss' // global css
+
+import * as Sentry from '@sentry/browser'
+import * as Integrations from '@sentry/integrations'
+
+Sentry.init({
+    dsn: 'https://a386d85597434a6b923b59f63c56cca9@sentry.io/1495403',
+    release: 'pro@1.0.1',
+    nvironment: 'product',
+    integrations: [new Integrations.Vue({Vue, attachProps: true})]
+})
+
 Vue.use(ElementUI, {
     locale
 })

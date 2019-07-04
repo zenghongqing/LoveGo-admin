@@ -15,6 +15,8 @@
     "dll": "webpack --config build/webpack.dll.conf.js"
   },
   "dependencies": {
+    "@sentry/browser": "^5.4.3",
+    "@sentry/integrations": "^5.4.2",
     "alipay-mobile": "^2.2.7",
     "axios": "^0.18.0",
     "element-ui": "^2.4.8",
@@ -101,7 +103,8 @@
     "webpack-bundle-analyzer": "^2.13.1",
     "webpack-cli": "^3.2.1",
     "webpack-dev-server": "^3.1.14",
-    "webpack-merge": "^4.2.1"
+    "webpack-merge": "^4.2.1",
+    "webpack-sentry-plugin": "^2.0.1"
   },
   "engines": {
     "node": ">= 6.0.0",
